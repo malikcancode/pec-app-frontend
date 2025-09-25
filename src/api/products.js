@@ -2,7 +2,7 @@
 const products = [
   {
     id: 1,
-    name: "Zone3 Attack Swim Goggles",
+    name: "Zone3 Attack Swim",
     price: 135.0,
     rating: 4.5,
     reviews: 201,
