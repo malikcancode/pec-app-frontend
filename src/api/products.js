@@ -7,7 +7,7 @@ const products = [
     rating: 4.5,
     reviews: 201,
     stock: 15,
-    image: "/image1.jpg",
+    image: "/pants.jpeg",
     isLiked: true,
   },
   {
@@ -17,7 +17,7 @@ const products = [
     rating: 4.0,
     reviews: 185,
     stock: 10,
-    image: "/image2.jpg",
+    image: "/shirts.jpeg",
     isLiked: true,
   },
   {
@@ -27,7 +27,7 @@ const products = [
     rating: 4.3,
     reviews: 156,
     stock: 12,
-    image: "/image1.jpg",
+    image: "/shirts.jpeg",
     isLiked: true,
   },
   {
@@ -37,7 +37,7 @@ const products = [
     rating: 4.5,
     reviews: 207,
     stock: 4,
-    image: "/image2.jpg",
+    image: "/shirts.jpeg",
     isLiked: true,
   },
 ];
