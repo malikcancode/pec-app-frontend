@@ -23,7 +23,7 @@ export default function Referral() {
         </p>
         <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
           Your referral link:{" "}
-          <span className="font-semibold text-green-600">
+          <span className="font-semibold sm:text-sm text-xs text-green-600">
             partnersellercenter.shop/ref/USER123
           </span>
         </div>

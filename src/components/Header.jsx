@@ -69,7 +69,7 @@ export default function Header() {
           <div className="w-6 h-6 bg-green-500 rounded flex items-center justify-center">
             <span className="text-white text-xs font-bold">◊</span>
           </div>
-          <span className="font-bold text-green-600 capitalize text-sm">
+          <span className="font-bold text-green-600 capitalize sm:text-sm text-xs">
             {" "}
             partnersellercenter.shop
           </span>
@@ -77,7 +77,7 @@ export default function Header() {
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
-          <FaBell className="text-gray-600 text-lg cursor-pointer" />
+          {/* <FaBell className="text-gray-600 text-lg cursor-pointer" /> */}
           <FaUser className="text-gray-600 text-lg cursor-pointer" />
           <div className="flex items-center gap-1 cursor-pointer">
             <img

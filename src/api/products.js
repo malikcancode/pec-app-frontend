@@ -2,7 +2,7 @@
 const products = [
   {
     id: 1,
-    name: "Zone3 Attack Swim",
+    name: "Zone3 Attack",
     price: 135.0,
     rating: 4.5,
     reviews: 201,
@@ -12,7 +12,7 @@ const products = [
   },
   {
     id: 2,
-    name: "Big Frame Competition Swim Goggles",
+    name: "Big Frame",
     price: 145.0,
     rating: 4.0,
     reviews: 185,
@@ -22,7 +22,7 @@ const products = [
   },
   {
     id: 3,
-    name: "Pro Racing Goggles Elite",
+    name: "Pro Racing",
     price: 105.0,
     rating: 4.3,
     reviews: 156,
@@ -32,7 +32,7 @@ const products = [
   },
   {
     id: 4,
-    name: "Competition Swim Goggles",
+    name: "Competition",
     price: 94.0,
     rating: 4.5,
     reviews: 207,
