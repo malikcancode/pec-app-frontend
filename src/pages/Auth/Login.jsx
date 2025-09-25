@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FiBell, FiUser } from "react-icons/fi";
-import { sendOtp, loginWithOtp } from "../api/api"; // updated API
+import { sendOtp, loginWithOtp, loginWithUsername } from "../../api/api"; // ✅ import new API
 
 export default function Login() {
   const { login } = useContext(AuthContext);
@@ -17,6 +17,8 @@ export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     verificationCode: "",
+    username: "",
+    password: "",
   });
 
   // Step 1: Obtain OTP
@@ -32,28 +34,49 @@ export default function Login() {
     }
   };
 
-  // Step 2: Login with OTP
+  // Step 2: Handle Submit (depends on tab)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!agreed)
       return alert("Please agree to the service agreement and privacy policy");
-    if (!otpSent) return alert("Obtain OTP first");
-    if (!formData.verificationCode) return alert("Enter OTP");
 
-    try {
-      const res = await loginWithOtp({
-        email: formData.email,
-        otp: formData.verificationCode,
-      });
+    if (activeTab === "Email") {
+      if (!otpSent) return alert("Obtain OTP first");
+      if (!formData.verificationCode) return alert("Enter OTP");
 
-      // Save token to context
-      login(res.data.token);
-      alert("Login successful!");
-      navigate("/dashboard");
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.error || "Login failed");
+      try {
+        const res = await loginWithOtp({
+          email: formData.email,
+          otp: formData.verificationCode,
+        });
+
+        login(res.data.token); // save to context + localStorage
+        alert("Login successful!");
+        navigate("/products");
+      } catch (err) {
+        console.error(err);
+        alert(err.response?.data?.error || "Login failed");
+      }
+    }
+
+    if (activeTab === "Account") {
+      if (!formData.username) return alert("Enter username");
+      if (!formData.password) return alert("Enter password");
+
+      try {
+        const res = await loginWithUsername({
+          username: formData.username,
+          password: formData.password,
+        });
+
+        login(res.data.token);
+        alert("Login successful!");
+        navigate("/products");
+      } catch (err) {
+        console.error(err);
+        alert(err.response?.data?.error || "Account login failed");
+      }
     }
   };
 
@@ -70,6 +93,10 @@ export default function Login() {
         <div className="flex items-center space-x-4">
           <FiBell className="text-gray-600" size={20} />
           <FiUser className="text-gray-600" size={20} />
+          <div className="flex items-center space-x-1">
+            <img src="/united-kingdom.png" alt="UK" className="w-5 h-3" />
+            <span className="text-sm text-gray-600">EN</span>
+          </div>
         </div>
       </header>
 
@@ -96,6 +123,71 @@ export default function Login() {
               </button>
             ))}
           </div>
+
+          {/* Account Login */}
+          {activeTab === "Account" && (
+            <form onSubmit={handleSubmit} className="space-y-4 w-full">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
+                  placeholder="Enter your username"
+                  className="w-full px-3 py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  placeholder="Enter your password"
+                  className="w-full px-3 py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white"
+                  required
+                />
+              </div>
+
+              {/* Agreement */}
+              <div className="flex items-start space-x-2 py-2">
+                <input
+                  type="checkbox"
+                  id="agreement"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                />
+                <label htmlFor="agreement" className="text-sm text-gray-600">
+                  Read and agree 'Service agreement' and 'Privacy policy'?
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium mt-6"
+              >
+                Login
+              </button>
+            </form>
+          )}
+
+          {/* Mobile Login (coming soon) */}
+          {activeTab === "Mobile" && (
+            <p className="text-center text-gray-500 py-10">
+              Mobile login coming soon 🚧
+            </p>
+          )}
 
           {/* Email Login */}
           {activeTab === "Email" && (
@@ -158,7 +250,6 @@ export default function Login() {
                 </label>
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
                 className="w-full py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-medium mt-6"

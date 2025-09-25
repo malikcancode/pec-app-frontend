@@ -2,16 +2,19 @@
 import { FaCog, FaShoppingCart, FaWallet, FaHome } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
+import { AiFillProduct } from "react-icons/ai";
 
 export default function BottomNavigation() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const navItems = [
+    { icon: <FaHome />, label: "Homepage", path: "/products" },
     { icon: <FaCog />, label: "Operations Center", path: "/dashboard" },
-    { icon: <FaWallet />, label: "My Wallet", path: "/wallet" },
+    // { icon: <FaWallet />, label: "My Wallet", path: "/wallet" },
     { icon: <FaShoppingCart />, label: "Order Center", path: "/orders" },
-    { icon: <FaHome />, label: "Home Page", path: "" },
+    // { icon: <FaHome />, label: "Home Page", path: "" },
+    { icon: <AiFillProduct />, label: "Coming Soon", path: "" },
   ];
 
   return (

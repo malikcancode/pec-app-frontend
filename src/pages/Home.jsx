@@ -19,19 +19,19 @@ function Home() {
         <div className="flex items-center space-x-3">
           <button
             onClick={() => navigate("/login")}
-            className="px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors"
+            className="px-4 py-2 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
           >
             Log in
           </button>
           <button
             onClick={() => navigate("/register")}
-            className="px-4 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+            className="px-4 py-2 bg-black cursor-pointer text-white rounded-full hover:bg-gray-800 transition-colors"
           >
             Sign up
           </button>
-          <button className="p-2 text-gray-700 hover:text-gray-900 transition-colors">
+          {/* <button className="p-2 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
             <FiMenu size={20} />
-          </button>
+          </button> */}
         </div>
       </header>
 
