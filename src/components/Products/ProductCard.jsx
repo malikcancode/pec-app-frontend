@@ -11,7 +11,7 @@ export default function ProductCard({ product }) {
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:shadow-md transition">
         <div className="relative mb-3">
           <img
-            src={product.image || "/placeholder.svg"}
+            src={product.image}
             alt={product.name}
             className="w-full h-24 object-contain rounded-lg"
           />

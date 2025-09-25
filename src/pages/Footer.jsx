@@ -52,7 +52,10 @@ function Footer() {
           <div>
             <h3 className="font-semibold text-gray-800 mb-3">Payment</h3>
             <div className="flex flex-wrap justify-start gap-3 sm:justify-start">
-              <img src="/50d1c8a7-9005-42ef-ad39-535ba26647ab.png" alt="" />
+              <img
+                src="/50d1c8a7-9005-42ef-ad39-535ba26647ab.png"
+                alt="Payment method"
+              />
             </div>
           </div>
         </div>
@@ -61,11 +64,7 @@ function Footer() {
         <div className="mt-10 text-start">
           <h3 className="font-semibold text-gray-800 mb-3">Social</h3>
           <div className="flex justify-start gap-4">
-            <img
-              className="w-96"
-              src="/36d4a14e-dcf8-4adf-a8e4-fa3242d8be8c.png"
-              alt=""
-            />
+            <img src="/36d4a14e-dcf8-4adf-a8e4-fa3242d8be8c.png" alt="Social" />
           </div>
         </div>
 

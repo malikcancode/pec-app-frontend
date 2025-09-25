@@ -8,8 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [loading, setLoading] = useState(true);
 
-  console.log(user);
-
   useEffect(() => {
     if (token) {
       getProfile(token)
