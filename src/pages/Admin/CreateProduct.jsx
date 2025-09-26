@@ -46,7 +46,7 @@ function CreateProduct() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-6">
+    <div className="min-h-screen flex flex-col justify-start py-8 items-center px-6">
       <div className="max-w-7xl w-full">
         <h1 className="text-3xl font-semibold text-start mb-6">
           Create New Product
@@ -151,7 +151,7 @@ function CreateProduct() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+            className="w-full bg-green-600 text-white py-3 rounded-lg shadow-md "
           >
             Create Product
           </button>

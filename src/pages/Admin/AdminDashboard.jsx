@@ -4,11 +4,11 @@ import { FaShoppingCart, FaUsers, FaDollarSign, FaBox } from "react-icons/fa";
 function AdminDashboard() {
   return (
     <div className="flex-1 h-screen p-6 overflow-y-auto">
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Total Products Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaBox className="text-green-600 text-2xl " />{" "}
+            <FaBox className="text-green-600 text-2xl" />
             {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
@@ -22,7 +22,7 @@ function AdminDashboard() {
         {/* Total Users Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaUsers className="text-green-600 text-2xl sm:text-3xl lg:text-4xl" />{" "}
+            <FaUsers className="text-green-600 text-2xl sm:text-3xl lg:text-4xl" />
             {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
@@ -36,7 +36,7 @@ function AdminDashboard() {
         {/* Revenue Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaDollarSign className="text-green-600 text-2xl " />{" "}
+            <FaDollarSign className="text-green-600 text-2xl" />
             {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">Revenue</h3>
@@ -48,7 +48,7 @@ function AdminDashboard() {
         {/* Total Orders Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaShoppingCart className="text-green-600 text-2xl" />{" "}
+            <FaShoppingCart className="text-green-600 text-2xl" />
             {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
