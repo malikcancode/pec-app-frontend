@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../api/productsApi";
 
 function CreateProduct() {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
     category: "",
-    image: null, // New state for the image file
+    image: null,
   });
 
   const navigate = useNavigate();
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -20,9 +20,8 @@ function CreateProduct() {
     }));
   };
 
-  // Handle image upload
   const handleImageChange = (e) => {
-    const file = e.target.files[0]; // Get the uploaded file
+    const file = e.target.files[0];
     if (file) {
       setFormData((prevData) => ({
         ...prevData,
@@ -31,16 +30,27 @@ function CreateProduct() {
     }
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Product Created:", formData);
-    // You can later add logic to save the product (e.g., call an API to upload the image)
-    // Redirect back to product list page
-    navigate("/admin/admin-products");
+    const token = localStorage.getItem("token");
+
+    const productFormData = new FormData();
+    productFormData.append("name", formData.name);
+    productFormData.append("price", formData.price);
+    productFormData.append("category", formData.category);
+    if (formData.image) {
+      productFormData.append("image", formData.image);
+    }
+
+    try {
+      const response = await createProduct(productFormData, token);
+      console.log("Product Created:", response.data);
+      navigate("/admin/admin-products");
+    } catch (error) {
+      console.error("Error creating product:", error);
+    }
   };
 
-  // Back button functionality
   const handleBack = () => {
     navigate("/admin/admin-products");
   };
@@ -48,10 +58,6 @@ function CreateProduct() {
   return (
     <div className="min-h-screen flex flex-col justify-start py-8 items-center px-6">
       <div className="max-w-7xl w-full">
-        {/* <h1 className="text-3xl font-semibold text-start mb-6">
-          Create New Product
-        </h1> */}
-
         <button
           onClick={handleBack}
           className="bg-gray-600 text-white py-2 px-6 rounded-lg shadow-md hover:bg-gray-700 mb-6 w-full sm:w-auto"
@@ -63,7 +69,6 @@ function CreateProduct() {
           onSubmit={handleSubmit}
           className="bg-white p-4 rounded-lg shadow-lg border border-gray-200"
         >
-          {/* Product Name */}
           <div className="mb-6">
             <label
               htmlFor="name"
@@ -77,12 +82,11 @@ function CreateProduct() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300"
               required
             />
           </div>
 
-          {/* Product Price */}
           <div className="mb-6">
             <label
               htmlFor="price"
@@ -96,12 +100,11 @@ function CreateProduct() {
               name="price"
               value={formData.price}
               onChange={handleChange}
-              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300"
               required
             />
           </div>
 
-          {/* Product Category */}
           <div className="mb-6">
             <label
               htmlFor="category"
@@ -115,12 +118,11 @@ function CreateProduct() {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300"
               required
             />
           </div>
 
-          {/* Product Image Upload */}
           <div className="mb-6">
             <label
               htmlFor="image"
@@ -134,7 +136,7 @@ function CreateProduct() {
               name="image"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300"
             />
             {formData.image && (
               <div className="mt-4">
@@ -148,10 +150,9 @@ function CreateProduct() {
             )}
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-3 rounded-lg shadow-md "
+            className="w-full bg-green-600 text-white py-3 rounded-lg shadow-md"
           >
             Create Product
           </button>

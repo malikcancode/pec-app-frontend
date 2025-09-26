@@ -9,50 +9,50 @@ function AdminSidbar({ closeSidebar, setActiveLink, activeLink }) {
   };
 
   return (
-    <div className="sm:h-screen h-full bg-gray-800 p-4 text-white relative">
+    <div className="sm:h-screen h-full bg-green-800 p-4 border-r text-white relative">
       <button
         onClick={closeSidebar}
         className="absolute top-4 right-4 sm:hidden text-white text-2xl"
       >
         <FaTimes />
       </button>
-      <h2 className="text-xl font-semibold mb-8">Sidebar</h2>
+      <h2 className="text-xl font-semibold mb-8 text-white">Sidebar</h2>
       <ul className="flex items-start gap-2 justify-center flex-col">
         <li
           className={`mb-2 p-2 rounded-lg w-full cursor-pointer ${
-            activeLink === "Dashboard" ? "bg-blue-500" : ""
+            activeLink === "Dashboard" ? "bg-green-600" : "bg-green-800"
           }`}
         >
           <Link
             to="/admin"
             onClick={() => handleLinkClick("Dashboard")}
-            className="block w-full p-2 text-white" // Ensures full width click area
+            className="block w-full p-2 text-white"
           >
             Dashboard
           </Link>
         </li>
         <li
           className={`mb-2 p-2 rounded-lg w-full cursor-pointer ${
-            activeLink === "Products" ? "bg-blue-500" : ""
+            activeLink === "Products" ? "bg-green-600" : "bg-green-800"
           }`}
         >
           <Link
             to="/admin/admin-products"
             onClick={() => handleLinkClick("Products")}
-            className="block w-full p-2 text-white" // Ensures full width click area
+            className="block w-full p-2 text-white"
           >
             Products
           </Link>
         </li>
         <li
           className={`mb-2 p-2 rounded-lg w-full cursor-pointer ${
-            activeLink === "Orders" ? "bg-blue-500" : "" // Use "Orders" as the active link check
+            activeLink === "Orders" ? "bg-green-600" : "bg-green-800"
           }`}
         >
           <Link
             to="/admin/orders"
             onClick={() => handleLinkClick("Orders")}
-            className="block w-full p-2 text-white" // Ensures full width click area
+            className="block w-full p-2 text-white"
           >
             Orders
           </Link>
@@ -60,26 +60,26 @@ function AdminSidbar({ closeSidebar, setActiveLink, activeLink }) {
 
         <li
           className={`mb-2 p-2 rounded-lg w-full cursor-pointer ${
-            activeLink === "Users" ? "bg-blue-500" : ""
+            activeLink === "Users" ? "bg-green-600" : "bg-green-800"
           }`}
         >
           <Link
             to="/admin/users"
             onClick={() => handleLinkClick("Users")}
-            className="block w-full p-2 text-white" // Ensures full width click area
+            className="block w-full p-2 text-white"
           >
             Users
           </Link>
         </li>
         <li
-          className={`mb-2 p-2 w-full rounded-lg cursor-pointer ${
-            activeLink === "Notifications" ? "bg-blue-500" : ""
+          className={`mb-2 p-2 rounded-lg w-full cursor-pointer ${
+            activeLink === "Notifications" ? "bg-green-600" : "bg-green-800"
           }`}
         >
           <Link
             to="/admin/notifications"
             onClick={() => handleLinkClick("Notifications")}
-            className="block w-full p-2 text-white" // Ensures full width click area
+            className="block w-full p-2 text-white"
           >
             Notifications
           </Link>

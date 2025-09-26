@@ -14,8 +14,8 @@ function Table({ products, onDelete, onEdit }) {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
-            <tr key={index} className="border-b border-gray-600">
+          {products.map((product) => (
+            <tr key={product._id} className="border-b border-gray-600">
               <td className="px-6 py-3">{product.name}</td>
               <td className="px-6 py-3">${product.price}</td>
               <td className="px-6 py-3">{product.category}</td>
@@ -27,7 +27,7 @@ function Table({ products, onDelete, onEdit }) {
                   <FaEdit />
                 </button>
                 <button
-                  onClick={() => onDelete(product.id)}
+                  onClick={() => onDelete(product._id)} // Use product._id instead of product.id
                   className="text-red-500 hover:text-red-600"
                 >
                   <FaTrashAlt />

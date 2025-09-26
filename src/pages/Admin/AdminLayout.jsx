@@ -31,7 +31,7 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="h-full bg-[#1f1b2e] text-white">
+    <div className="h-full text-white">
       <AdminNavbar toggleSidebar={toggleSidebar} />
       <div className="flex">
         {/* Sidebar */}

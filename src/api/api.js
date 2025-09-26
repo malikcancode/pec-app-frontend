@@ -2,8 +2,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://pec-app-backend.vercel.app/api", // ✅ use deployed backend
-  // baseURL: "http://localhost:5000/api",
+  // baseURL: "https://pec-app-backend.vercel.app/api", // ✅ use deployed backend
+  baseURL: "http://localhost:5000/api",
 });
 
 // Send OTP
