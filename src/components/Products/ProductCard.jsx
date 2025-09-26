@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import { FiHeart, FiStar } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
+import { useWishlist } from "../../context/WishlistContext";
 
 export default function ProductCard({ product }) {
-  const [isLiked, setIsLiked] = useState(product.isLiked);
+  const { wishlist, toggleWishlist } = useWishlist();
+
+  const isLiked = wishlist.some((item) => item.id === product.id);
 
   return (
     <Link to={`/products/${product.id}`}>
@@ -18,7 +20,7 @@ export default function ProductCard({ product }) {
           <button
             onClick={(e) => {
               e.preventDefault(); // stop navigation when liking
-              setIsLiked(!isLiked);
+              toggleWishlist(product);
             }}
             className="absolute top-2 right-2 p-1"
           >

@@ -32,6 +32,14 @@ import Settings from "./pages/MenuPages/Settings";
 import StoreKYC from "./pages/MenuPages/StoreKYC";
 import WishList from "./pages/MenuPages/WishList";
 import MyOrders from "./pages/MenuPages/MyOrders";
+import Cart from "./pages/MenuPages/Cart";
+import AdminLayout from "./pages/Admin/AdminLayout";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import Users from "./pages/Admin/Users";
+import Notifications from "./pages/Admin/Notifications";
+import AdminProducts from "./pages/Admin/AdminProducts";
+import CreateProduct from "./pages/Admin/CreateProduct";
+import Orders from "./pages/Admin/Orders";
 
 function App() {
   return (
@@ -44,6 +52,23 @@ function App() {
           <Route path="/register" element={<Register />} />
 
           {/* Dashboard Layout Routes */}
+
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="admin-products" element={<AdminProducts />} />
+            <Route path="create-product" element={<CreateProduct />} />
+            <Route path="users" element={<Users />} />
+            <Route path="notifications" element={<Notifications />} />{" "}
+            <Route path="orders" element={<Orders />} />{" "}
+          </Route>
+
           <Route
             path="/dashboard"
             element={
@@ -240,6 +265,17 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <Referral />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Cart />
                 </DashboardLayout>
               </ProtectedRoute>
             }

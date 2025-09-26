@@ -29,7 +29,7 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext); // ✅ destructure logout
 
   const navLinks = [
     { name: "Wallet", href: "/wallet", icon: <FaWallet /> },
@@ -39,6 +39,8 @@ export default function Header() {
       href: "/wishlist",
       icon: <FaHeart />,
     },
+    { name: "My Cart", href: "/cart", icon: <FaShoppingBag /> },
+
     { name: " Friends (Referral)", href: "/referral", icon: <FaUsers /> },
     {
       name: "Store KYC Verification",
@@ -71,14 +73,16 @@ export default function Header() {
           </div>
           <span className="font-bold text-green-600 capitalize sm:text-sm text-xs">
             {" "}
-            partnersellercenter.shop
+            PSC
           </span>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
           {/* <FaBell className="text-gray-600 text-lg cursor-pointer" /> */}
-          <FaUser className="text-gray-600 text-lg cursor-pointer" />
+          <Link to="/profile">
+            <FaUser className="text-gray-600 text-lg cursor-pointer" />
+          </Link>
           <div className="flex items-center gap-1 cursor-pointer">
             <img
               src="/united-kingdom.png"
@@ -148,16 +152,17 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Sign Out at Bottom */}
             <div className="border-t border-gray-200 p-4">
-              <Link
-                to="/logout"
-                onClick={() => setMenuOpen(false)}
+              <button
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
                 className="flex items-center gap-3 text-red-600 font-medium p-2 rounded-lg hover:bg-red-50"
               >
                 <FaSignOutAlt className="text-lg" />
                 <span className="text-base">Sign Out</span>
-              </Link>
+              </button>
             </div>
           </motion.div>
         )}

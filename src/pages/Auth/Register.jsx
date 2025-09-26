@@ -90,7 +90,7 @@ function Register() {
           <div className="w-8 h-8 bg-green-500 rounded flex items-center justify-center">
             <span className="text-white font-bold text-sm">◊</span>
           </div>
-          <span className="text-green-600 font-bold text-xl">PEC</span>
+          <span className="text-green-600 font-bold text-xl">PSC</span>
         </div>
         <div className="flex items-center space-x-4">
           <FiBell className="text-gray-600" size={20} />
