@@ -25,11 +25,11 @@ function Notifications() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-start items-center px-6">
+    <div className="min-h-screen flex flex-col justify-start items-center px-1">
       <div className="max-w-7xl w-full">
-        <h1 className="text-3xl font-semibold text-start mb-6 text-gray-100">
+        {/* <h1 className="text-3xl font-semibold text-start mb-6 text-gray-100">
           Notifications
-        </h1>
+        </h1> */}
 
         {/* Notifications Table */}
         <div className="overflow-x-auto bg-gray-800 rounded-lg shadow-md">

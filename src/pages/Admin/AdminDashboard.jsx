@@ -4,13 +4,12 @@ import { FaShoppingCart, FaUsers, FaDollarSign, FaBox } from "react-icons/fa";
 function AdminDashboard() {
   return (
     <div className="flex-1 h-screen p-6 overflow-y-auto">
-      <h2 className="text-3xl font-bold mb-8">Admin Dashboard</h2>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Total Products Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaBox className="text-green-600 text-4xl" />
+            <FaBox className="text-green-600 text-2xl " />{" "}
+            {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
                 Total Products
@@ -23,7 +22,8 @@ function AdminDashboard() {
         {/* Total Users Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaUsers className="text-green-600 text-4xl" />
+            <FaUsers className="text-green-600 text-2xl sm:text-3xl lg:text-4xl" />{" "}
+            {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
                 Total Users
@@ -36,7 +36,8 @@ function AdminDashboard() {
         {/* Revenue Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaDollarSign className="text-green-600 text-4xl" />
+            <FaDollarSign className="text-green-600 text-2xl " />{" "}
+            {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">Revenue</h3>
               <p className="text-2xl text-gray-900">$10,000</p>
@@ -47,7 +48,8 @@ function AdminDashboard() {
         {/* Total Orders Card */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
-            <FaShoppingCart className="text-green-600 text-4xl" />
+            <FaShoppingCart className="text-green-600 text-2xl" />{" "}
+            {/* Adjusted icon size */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700">
                 Total Orders

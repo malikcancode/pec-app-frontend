@@ -48,8 +48,7 @@ const AdminLayout = () => {
         </div>
 
         {/* Dashboard Content */}
-        <div className="w-full lg:w-4/5 p-8 pt-20 lg:pt-0">
-          <h1 className="text-2xl font-semibold">{activeLink} Section</h1>
+        <div className="w-full lg:w-4/5 p-8 pt-20">
           {/* Render dynamic content based on active link */}
           <Outlet />{" "}
           {/* The Outlet will render the appropriate content based on the route */}

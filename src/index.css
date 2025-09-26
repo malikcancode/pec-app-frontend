@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+body {
+  min-width: 640px; /* Ensures the page doesn't shrink below 640px */
+  height: 100%;
+}

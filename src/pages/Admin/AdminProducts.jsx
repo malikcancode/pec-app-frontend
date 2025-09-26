@@ -30,13 +30,15 @@ function AdminProducts() {
   };
 
   return (
-    <div className=" min-h-screen flex flex-col px-8 py-10">
+    <div className="min-h-screen flex flex-col px-4 sm:px-8 py-6 sm:py-10">
       <div className="max-w-full mx-auto w-full">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-semibold">Manage Products</h1>
+        <div className="flex flex-col sm:flex-row justify-end items-end mb-8 space-y-4 sm:space-y-0">
+          {/* <h1 className="text-3xl sm:text-4xl font-semibold">
+            Manage Products
+          </h1> */}
           <button
             onClick={handleCreateProduct}
-            className="bg-green-600 text-white py-3 px-8 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
+            className="bg-green-600 text-white text-xs sm:text-sm py-3 px-8 rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300"
           >
             Create Product
           </button>
