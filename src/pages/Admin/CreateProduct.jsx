@@ -48,9 +48,9 @@ function CreateProduct() {
   return (
     <div className="min-h-screen flex flex-col justify-start py-8 items-center px-6">
       <div className="max-w-7xl w-full">
-        <h1 className="text-3xl font-semibold text-start mb-6">
+        {/* <h1 className="text-3xl font-semibold text-start mb-6">
           Create New Product
-        </h1>
+        </h1> */}
 
         <button
           onClick={handleBack}
@@ -61,7 +61,7 @@ function CreateProduct() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-8 rounded-lg shadow-lg border border-gray-200"
+          className="bg-white p-4 rounded-lg shadow-lg border border-gray-200"
         >
           {/* Product Name */}
           <div className="mb-6">
