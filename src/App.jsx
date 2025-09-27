@@ -6,6 +6,20 @@ import { AuthProvider } from "./context/AuthContext";
 import Spinner from "./components/Spinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Notifications from "./pages/Admin/Notifications";
+import Products from "./pages/Products";
+import DashboardLayout from "./components/DashboardLayout";
+import MyOrders from "./pages/MenuPages/MyOrders";
+import Cart from "./pages/MenuPages/Cart";
+import WishList from "./pages/MenuPages/WishList";
+import Referral from "./pages/MenuPages/Referral";
+import StoreKYC from "./pages/MenuPages/StoreKYC";
+import Chat from "./pages/MenuPages/Chat";
+import Messages from "./pages/MenuPages/Messages";
+import Returns from "./pages/MenuPages/Returns";
+import Cancellations from "./pages/MenuPages/Cancellations";
+import Settings from "./pages/MenuPages/Settings";
+import Feedback from "./pages/MenuPages/Feedback";
+import Help from "./pages/MenuPages/Help";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -61,7 +75,19 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DashboardLayout>
+                    <Dashboard />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Products />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -69,7 +95,9 @@ function App() {
               path="/wallet"
               element={
                 <ProtectedRoute>
-                  <Wallet />
+                  <DashboardLayout>
+                    <Wallet />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -77,7 +105,109 @@ function App() {
               path="/orders"
               element={
                 <ProtectedRoute>
-                  <OrderCenter />
+                  <DashboardLayout>
+                    <OrderCenter />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-orders"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <MyOrders />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Cart />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wishlist"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <WishList />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/kyc"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <StoreKYC />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Chat />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Messages />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/returns"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Returns />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cancellations"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Cancellations />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Settings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/referral"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Referral />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -85,7 +215,9 @@ function App() {
               path="/withdraw"
               element={
                 <ProtectedRoute>
-                  <Withdraw />
+                  <DashboardLayout>
+                    <Withdraw />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -93,7 +225,9 @@ function App() {
               path="/payment-confirmation"
               element={
                 <ProtectedRoute>
-                  <PaymentConfirmation />
+                  <DashboardLayout>
+                    <PaymentConfirmation />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -101,7 +235,9 @@ function App() {
               path="/orders/:orderId"
               element={
                 <ProtectedRoute>
-                  <OrderDetails />
+                  <DashboardLayout>
+                    <OrderDetails />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -110,7 +246,9 @@ function App() {
               path="/about"
               element={
                 <ProtectedRoute>
-                  <About />
+                  <DashboardLayout>
+                    <About />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -118,7 +256,9 @@ function App() {
               path="/profile"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <DashboardLayout>
+                    <Profile />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -126,7 +266,29 @@ function App() {
               path="/faqs"
               element={
                 <ProtectedRoute>
-                  <FAQs />
+                  <DashboardLayout>
+                    <FAQs />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Feedback />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/help"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <Help />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -134,7 +296,9 @@ function App() {
               path="/privacypolicy"
               element={
                 <ProtectedRoute>
-                  <PrivacyPolicy />
+                  <DashboardLayout>
+                    <PrivacyPolicy />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
