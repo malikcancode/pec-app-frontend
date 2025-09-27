@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaBars, FaBell, FaUser } from "react-icons/fa"; // Add more icons as needed
+import { AuthContext } from "../../context/AuthContext";
 
 function AdminNavbar({ toggleSidebar }) {
+  const { user } = useContext(AuthContext); // Access user and loading from context
+
   return (
     <div className="bg-[#1f1b2e] p-4 text-white fixed top-0 left-0 right-0 z-40 flex items-center justify-between shadow-md">
       {/* Left Side (Logo / Brand Name) */}
@@ -25,7 +28,9 @@ function AdminNavbar({ toggleSidebar }) {
         {/* User Profile */}
         <button className="flex items-center space-x-2">
           <FaUser className="text-2xl" />
-          <span className="hidden sm:block">John Doe</span>{" "}
+          <span className="hidden sm:block">
+            {user?.username || "Admin"}
+          </span>{" "}
           {/* Display user name on larger screens */}
         </button>
       </div>

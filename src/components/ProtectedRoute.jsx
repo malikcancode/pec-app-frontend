@@ -1,13 +1,13 @@
-// src/components/ProtectedRoute.jsx
 import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import Spinner from "../components/Spinner"; // Import the Spinner component
 
 export default function ProtectedRoute({ children }) {
   const { token, loading } = useContext(AuthContext);
 
   if (loading) {
-    return <p>Loading...</p>; // optional loading state
+    return <Spinner />; // Show the spinner while loading
   }
 
   // If no token, redirect to login
