@@ -3,7 +3,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiBell, FiUser, FiEye, FiEyeOff } from "react-icons/fi";
-import { registerWithUsername, registerWithOtp } from "../../api/api";
+import { registerWithUsername, registerWithOtp, sendOtp } from "../../api/api";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function Register() {
@@ -25,6 +25,11 @@ export default function Register() {
 
   const handleObtainCode = async () => {
     if (!formData.email) return alert("Enter your email first");
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email))
+      return alert("Please enter a valid email address");
 
     try {
       await sendOtp({ email: formData.email });
@@ -228,6 +233,36 @@ export default function Register() {
                     className="w-full px-3 py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white"
                     required
                   />
+                </div>
+
+                {/* Password for Email Tab */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Set login password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
+                      placeholder="Set login password"
+                      className="w-full px-3 py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white pr-10"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? (
+                        <FiEyeOff size={18} />
+                      ) : (
+                        <FiEye size={18} />
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 <button

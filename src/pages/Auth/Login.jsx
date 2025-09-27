@@ -224,12 +224,12 @@ export default function Login() {
             </form>
           )}
 
-          {/* Mobile Login (coming soon) */}
+          {/* Mobile Login (coming soon)
           {activeTab === "Mobile" && (
             <p className="text-center text-gray-500 py-10">
               Mobile login coming soon 🚧
             </p>
-          )}
+          )} */}
 
           {/* Email Login */}
           {activeTab === "Email" && (

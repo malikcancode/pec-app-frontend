@@ -25,12 +25,10 @@ function AdminDashboard() {
       try {
         // Fetch total products
         const productRes = await getProducts(token); // Pass the token to API
-        console.log("Product Response:", productRes.data); // Log the products response
         setTotalProducts(productRes?.data?.length || 0); // Fallback to 0 if no data
 
         // Fetch total users
         const userRes = await getUsers(token); // Pass the token to API
-        console.log("User Response:", userRes.data); // Log the users response
         setTotalUsers(userRes?.data?.users?.length); // Access the 'users' array and get its length
       } catch (error) {
         console.error("Error fetching data:", error);
