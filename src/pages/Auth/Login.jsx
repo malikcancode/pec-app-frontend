@@ -4,7 +4,12 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FiBell, FiUser } from "react-icons/fi";
-import { sendOtp, loginWithOtp, loginWithUsername } from "../../api/api"; // ✅ import new API
+import {
+  sendOtp,
+  loginWithOtp,
+  loginWithUsername,
+  loginAdmin,
+} from "../../api/api"; // ✅ import loginAdmin
 
 export default function Login() {
   const { login } = useContext(AuthContext);
@@ -13,6 +18,7 @@ export default function Login() {
   const [activeTab, setActiveTab] = useState("Email");
   const [agreed, setAgreed] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
+  const [role, setRole] = useState("user"); // Added state for user/admin selection
 
   const [formData, setFormData] = useState({
     email: "",
@@ -50,16 +56,14 @@ export default function Login() {
           email: formData.email,
           otp: formData.verificationCode,
         });
-        console.log(res);
 
-        login(res.data.token); // save to context + localStorage
+        login(res.data.token, res.data.user.role); // pass role to context
         alert("Login successful!");
-
         // Role-based navigation
         if (res.data.user.role === "user") {
           navigate("/products");
         } else {
-          navigate("/login"); // Or any other page for different roles
+          navigate("/admin");
         }
       } catch (err) {
         console.error(err);
@@ -72,19 +76,29 @@ export default function Login() {
       if (!formData.password) return alert("Enter password");
 
       try {
-        const res = await loginWithUsername({
-          username: formData.username,
-          password: formData.password,
-        });
+        let res;
+        let userRole = role;
+        if (role === "admin") {
+          res = await loginAdmin({
+            username: formData.username,
+            password: formData.password,
+          });
+          userRole = res.data.admin.role;
+        } else {
+          res = await loginWithUsername({
+            username: formData.username,
+            password: formData.password,
+          });
+          userRole = res.data.user.role;
+        }
 
-        login(res.data.token);
+        login(res.data.token, userRole); // pass role to context
         alert("Login successful!");
 
-        // Role-based navigation
-        if (res.data.user.role === "user") {
-          navigate("/products");
+        if (userRole === "admin") {
+          navigate("/admin");
         } else {
-          navigate("/login"); // Or any other page for different roles
+          navigate("/products");
         }
       } catch (err) {
         console.error(err);
@@ -170,6 +184,21 @@ export default function Login() {
                   className="w-full px-3 py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white"
                   required
                 />
+              </div>
+
+              {/* Role Dropdown */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Role
+                </label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full px-3 py-3 bg-gray-50 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:bg-white"
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
 
               {/* Agreement */}

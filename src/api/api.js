@@ -27,3 +27,13 @@ export const loginWithUsername = (data) =>
 // Get user profile (after authentication)
 export const getProfile = (token) =>
   API.get("/auth/me", { headers: { Authorization: `Bearer ${token}` } });
+
+export const getAdminProfile = (token) =>
+  API.get("/admin/admin-profile", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const registerAdmin = (data) => API.post("/admin/register", data); // { username, password }
+
+// Admin Login using username + password
+export const loginAdmin = (data) => API.post("/admin/login", data); // { username, password }
