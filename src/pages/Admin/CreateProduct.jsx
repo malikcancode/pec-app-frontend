@@ -47,6 +47,9 @@ function CreateProduct() {
       console.log("Product Created:", response.data);
       navigate("/admin/admin-products");
     } catch (error) {
+      console.error("Server responded with error:", error.response.data);
+      console.error("Error in setup:", error.message);
+      console.error("No response received:", error.request);
       console.error("Error creating product:", error);
     }
   };
