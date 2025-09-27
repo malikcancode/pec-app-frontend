@@ -40,6 +40,7 @@ function Register() {
     e.preventDefault();
 
     if (activeTab === "Email") {
+      // Email + OTP Registration
       if (!otpSent) return alert("Obtain OTP first");
       if (!formData.verificationCode) return alert("Enter OTP");
       if (!formData.password) return alert("Set password");
@@ -62,6 +63,7 @@ function Register() {
     }
 
     if (activeTab === "Account") {
+      // Username + Password Registration
       if (!formData.username) return alert("Enter username");
       if (!formData.password) return alert("Enter password");
       if (!agreed) return alert("Agree to terms");

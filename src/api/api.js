@@ -1,30 +1,29 @@
 // src/api/index.js
 import axios from "axios";
 
+// Create an axios instance to manage requests to the backend
 const API = axios.create({
-  // baseURL: "https://pec-app-backend.vercel.app/api", // ✅ use deployed backend
-  baseURL: "http://localhost:5000/api",
+  // baseURL: "https://pec-app-backend.vercel.app/api", // use this for deployed backend
+  baseURL: "http://localhost:5000/api", // use this for local dev
 });
 
-// Send OTP
+// Send OTP to email
 export const sendOtp = (data) => API.post("/auth/send-otp", data); // { email }
 
-// Register with OTP + password
-export const registerWithOtp = (data) => API.post("/auth/register", data);
-// { email, otp, password }
+// Register using OTP + password
+export const registerWithOtp = (data) => API.post("/auth/register-otp", data); // { email, otp, password }
 
-// Login with OTP
-export const loginWithOtp = (data) => API.post("/auth/login", data);
-// { email, otp }
+// Login using OTP
+export const loginWithOtp = (data) => API.post("/auth/login-otp", data); // { email, otp }
 
-// Register with username/password
+// Register using username + password
 export const registerWithUsername = (data) =>
-  API.post("/auth/register-username", data);
+  API.post("/auth/register-username", data); // { username, password, invitationCode }
 
-// Login with username/password
+// Login using username + password
 export const loginWithUsername = (data) =>
-  API.post("/auth/login-username", data);
+  API.post("/auth/login-username", data); // { username, password }
 
-// Get user profile
+// Get user profile (after authentication)
 export const getProfile = (token) =>
   API.get("/auth/me", { headers: { Authorization: `Bearer ${token}` } });
