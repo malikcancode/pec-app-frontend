@@ -3,8 +3,8 @@ import axios from "axios";
 
 // Create an axios instance to manage requests to the backend
 const API = axios.create({
-  baseURL: "https://pec-app-backend.vercel.app/api", // use this for deployed backend
-  // baseURL: "http://localhost:5000/api", // use this for local dev
+  // baseURL: "https://pec-app-backend.vercel.app/api", // use this for deployed backend
+  baseURL: "http://localhost:5000/api", // use this for local dev
 });
 
 // Send OTP to email
@@ -37,3 +37,13 @@ export const registerAdmin = (data) => API.post("/admin/register", data); // { u
 
 // Admin Login using username + password
 export const loginAdmin = (data) => API.post("/admin/login", data); // { username, password }
+
+export const getUsers = (token) =>
+  API.get("/admin/users", {
+    headers: { Authorization: `Bearer ${token}` }, // Pass token for authentication
+  });
+
+export const deleteUser = (token, userId) =>
+  API.delete(`/admin/users/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });

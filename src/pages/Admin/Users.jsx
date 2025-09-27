@@ -1,47 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
-// import { getUsers } from "../../api/api"; // Import the API function
+import { getUsers, deleteUser } from "../../api/api"; // Import the API functions
 
 function Users() {
   const [users, setUsers] = useState([]); // State to store users
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const token = localStorage.getItem("token"); // Get the token from localStorage
-  //       if (!token) {
-  //         setError("No token found. Please login.");
-  //         setLoading(false);
-  //         return;
-  //       }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Get the token from localStorage
+        if (!token) {
+          setError("No token found. Please login.");
+          setLoading(false);
+          return;
+        }
 
-  //       const response = await getUsers(token); // Fetch users from API
-  //       if (response.status === 200) {
-  //         setUsers(response.data); // Set the users to state
-  //       } else {
-  //         setError("Failed to fetch users");
-  //       }
-  //       setLoading(false);
-  //     } catch (err) {
-  //       setError("Error fetching users");
-  //       setLoading(false);
-  //     }
-  //   };
+        const response = await getUsers(token); // Fetch users from API
+        if (response.status === 200) {
+          setUsers(response.data.users); // Set the users to state
+        } else {
+          setError("Failed to fetch users");
+        }
+        setLoading(false);
+      } catch (err) {
+        setError("Error fetching users");
+        setLoading(false);
+      }
+    };
 
-  //   fetchUsers();
-  // }, []);
+    fetchUsers();
+  }, []);
 
-  // // Delete a user by ID (you should implement this API function too)
-  // const handleDeleteUser = async (id) => {
-  //   try {
-  //     // Call your delete user API here
-  //     setUsers(users.filter((user) => user._id !== id)); // Remove user from state
-  //   } catch (error) {
-  //     setError("Error deleting user");
-  //   }
-  // };
+  // Delete a user by ID
+  const handleDeleteUser = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found. Please login.");
+        return;
+      }
+
+      const response = await deleteUser(token, id); // Call deleteUser API
+      if (response.status === 200) {
+        setUsers(users.filter((user) => user._id !== id)); // Remove user from state
+      } else {
+        setError("Failed to delete user");
+      }
+    } catch (error) {
+      setError("Error deleting user");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-start items-center px-6">
