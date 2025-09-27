@@ -55,8 +55,12 @@ function Register() {
         });
 
         alert("Registration successful!");
-        login(res.data.token);
-        navigate("/products");
+        login(res.data.token); // Login with token
+        if (res.data.user.role === "user") {
+          navigate("/products"); // Navigate to /products if role is 'user'
+        } else {
+          navigate("/login"); // Navigate to /login if role is not 'user'
+        }
       } catch (err) {
         alert(err.response?.data?.error || "OTP verification failed");
       }
@@ -76,8 +80,12 @@ function Register() {
         });
 
         alert("Account registration successful!");
-        login(res.data.token);
-        navigate("/products");
+        login(res.data.token); // Login with token
+        if (res.data.user.role === "user") {
+          navigate("/products"); // Navigate to /products if role is 'user'
+        } else {
+          navigate("/login"); // Navigate to /login if role is not 'user'
+        }
       } catch (err) {
         alert(err.response?.data?.error || "Account registration failed");
       }

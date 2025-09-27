@@ -50,10 +50,17 @@ export default function Login() {
           email: formData.email,
           otp: formData.verificationCode,
         });
+        console.log(res);
 
         login(res.data.token); // save to context + localStorage
         alert("Login successful!");
-        navigate("/products");
+
+        // Role-based navigation
+        if (res.data.user.role === "user") {
+          navigate("/products");
+        } else {
+          navigate("/login"); // Or any other page for different roles
+        }
       } catch (err) {
         console.error(err);
         alert(err.response?.data?.error || "Login failed");
@@ -72,7 +79,13 @@ export default function Login() {
 
         login(res.data.token);
         alert("Login successful!");
-        navigate("/products");
+
+        // Role-based navigation
+        if (res.data.user.role === "user") {
+          navigate("/products");
+        } else {
+          navigate("/login"); // Or any other page for different roles
+        }
       } catch (err) {
         console.error(err);
         alert(err.response?.data?.error || "Account login failed");
