@@ -2,11 +2,11 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="border-t border-gray-200">
-      <div className="max-w-6xl mx-auto px-6 py-10">
+    <footer className="w-full bg-white border-t border-gray-200">
+      <div className="w-full p-6">
         {/* Top Section */}
-        <div className="text-start sm:text-center mb-8">
-          <h2 className="text-2xl font-bold text-purple-700">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-green-500">
             partnersellercenter.shop
           </h2>
         </div>

@@ -47,3 +47,17 @@ export const deleteUser = (token, userId) =>
   API.delete(`/admin/users/${userId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+// Update user profile (name + profile image)
+export const updateProfile = (token, data) => {
+  const formData = new FormData();
+  if (data.name) formData.append("name", data.name);
+  if (data.profileImage) formData.append("profileImage", data.profileImage);
+
+  return API.put("/auth/update-profile", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

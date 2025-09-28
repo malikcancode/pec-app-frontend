@@ -20,6 +20,7 @@ import Cancellations from "./pages/MenuPages/Cancellations";
 import Settings from "./pages/MenuPages/Settings";
 import Feedback from "./pages/MenuPages/Feedback";
 import Help from "./pages/MenuPages/Help";
+import ProductDetails from "./components/Products/ProductDetails";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -87,6 +88,16 @@ function App() {
                 <ProtectedRoute>
                   <DashboardLayout>
                     <Products />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/products/:id"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <ProductDetails />
                   </DashboardLayout>
                 </ProtectedRoute>
               }

@@ -71,10 +71,13 @@ export default function Header() {
           <div className="w-6 h-6 bg-green-500 rounded flex items-center justify-center">
             <span className="text-white text-xs font-bold">◊</span>
           </div>
-          <span className="font-bold text-green-600 capitalize sm:text-sm text-xs">
+          <Link
+            to="/products"
+            className="font-bold text-green-600 capitalize sm:text-sm text-xs"
+          >
             {" "}
             PSC
-          </span>
+          </Link>
         </div>
 
         {/* Right Section */}
