@@ -26,18 +26,18 @@ export default function ProductsHeader() {
   return (
     <div className="bg-white rounded-2xl p-4 mb-6">
       {/* Search + Dropdown */}
-      <div className="flex flex-row gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search products..."
-          className="px-4 py-2 border rounded-lg flex-1"
+          className="px-4 py-2 border rounded-lg flex-1 w-full sm:w-auto"
         />
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2 border rounded-lg w-40 flex-shrink-0"
+          className="px-4 py-2 border rounded-lg w-full sm:w-40"
         >
           <option value="">All Categories</option>
           {categories.map((cat) => (
@@ -49,7 +49,7 @@ export default function ProductsHeader() {
       </div>
 
       {/* Category Icons */}
-      <div className="flex flex-wrap justify-start gap-2">
+      <div className="grid grid-cols-3 sm:flex sm:flex-wrap sm:justify-start gap-3">
         {categories.map((cat) => {
           const Icon = cat.icon;
           const isActive = selectedCategory === cat.name;
@@ -57,7 +57,7 @@ export default function ProductsHeader() {
             <button
               key={cat.name}
               onClick={() => setSelectedCategory(isActive ? "" : cat.name)}
-              className={`flex flex-col items-center p-2 rounded-xl border transition-colors
+              className={`flex flex-col items-center p-2 rounded-xl border transition-colors text-center
                 ${
                   isActive
                     ? "bg-green-100 border-green-500 text-green-700"
@@ -65,8 +65,8 @@ export default function ProductsHeader() {
                 }
               `}
             >
-              <Icon size={16} />
-              <span className="text-xs mt-1">{cat.name}</span>
+              <Icon size={18} className="mb-1" />
+              <span className="text-[10px] sm:text-xs">{cat.name}</span>
             </button>
           );
         })}
