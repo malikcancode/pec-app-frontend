@@ -1,27 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { getProducts } from "../../api/productsApi.js";
-import ProductCard from "../Products/ProductCard.jsx";
+import { useProducts } from "../../context/ProductsContext";
+import ProductCard from "../Products/ProductCard";
 
 export default function ProductGrid() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await getProducts();
-        setProducts(res.data);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to load products");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const { products, loading, error } = useProducts();
 
   if (loading)
     return <p className="text-gray-600 text-center">Loading products...</p>;

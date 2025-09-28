@@ -32,7 +32,7 @@ export default function Header() {
   const { user, logout } = useContext(AuthContext); // ✅ destructure logout
 
   const navLinks = [
-    { name: "Wallet", href: "/wallet", icon: <FaWallet /> },
+    { name: "PSC Wallet", href: "/wallet", icon: <FaWallet /> },
     { name: "My Orders", href: "/my-orders", icon: <FaShoppingBag /> },
     {
       name: "My Wishlist & Followed Store",
@@ -41,7 +41,7 @@ export default function Header() {
     },
     { name: "My Cart", href: "/cart", icon: <FaShoppingBag /> },
 
-    { name: " Friends (Referral)", href: "/referral", icon: <FaUsers /> },
+    { name: " Partner Stores", href: "/referral", icon: <FaUsers /> },
     {
       name: "Store KYC Verification",
       href: "/kyc",

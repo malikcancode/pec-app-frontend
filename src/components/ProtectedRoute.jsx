@@ -1,20 +1,28 @@
 import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import Spinner from "../components/Spinner"; // Import the Spinner component
+import Spinner from "../components/Spinner";
 
-export default function ProtectedRoute({ children }) {
-  const { token, loading } = useContext(AuthContext);
+export default function ProtectedRoute({ children, allowedRoles }) {
+  const { token, role, loading } = useContext(AuthContext);
+  const location = useLocation();
 
   if (loading) {
-    return <Spinner />; // Show the spinner while loading
+    return <Spinner />;
   }
 
-  // If no token, redirect to login
+  // Not logged in → redirect to login
   if (!token) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Otherwise, render children
+  // Logged in but not allowed for this route → redirect based on role
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    if (role === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
+    return <Navigate to="/products" replace />;
+  }
+
   return children;
 }

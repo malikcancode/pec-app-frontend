@@ -58,7 +58,7 @@ function App() {
             <Route
               path="/admin"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["admin"]}>
                   <AdminLayout />
                 </ProtectedRoute>
               }
@@ -75,244 +75,267 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Dashboard />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/products"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Products />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/products/:id"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <ProductDetails />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/wallet"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Wallet />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/orders"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <OrderCenter />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/my-orders"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <MyOrders />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/cart"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Cart />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/wishlist"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <WishList />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/kyc"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <StoreKYC />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/chat"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Chat />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/messages"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Messages />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/returns"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Returns />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/cancellations"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Cancellations />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/settings"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Settings />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/referral"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Referral />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/withdraw"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Withdraw />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/payment-confirmation"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <PaymentConfirmation />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/orders/:orderId"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <OrderDetails />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
-            {/* More Routes Here */}
+
             <Route
               path="/about"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <About />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/profile"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Profile />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/faqs"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <FAQs />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/feedback"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Feedback />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/help"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Help />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/privacypolicy"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <PrivacyPolicy />
                   </DashboardLayout>
                 </ProtectedRoute>
               }
             />
+
             {/* Fallback Route */}
             <Route path="*" element={<p>Page Not Found</p>} />
           </Routes>

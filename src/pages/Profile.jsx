@@ -161,7 +161,7 @@ export default function Profile() {
               <span className="text-green-600 text-lg">{item.icon}</span>
               <div>
                 <p className="text-gray-500 text-sm">{item.label}</p>
-                <p className="font-medium text-gray-800">{item.value}</p>
+                <div className="font-medium text-gray-800">{item.value}</div>
               </div>
             </div>
           ))}

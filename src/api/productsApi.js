@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://pec-app-backend.vercel.app/api",
-  // baseURL: "http://localhost:5000/api", // Use local backend for dev
+  // baseURL: "https://pec-app-backend.vercel.app/api",
+  baseURL: "http://localhost:5000/api", // Use local backend for dev
 });
 
 // Create a new product (Admin only)
@@ -13,7 +13,9 @@ export const createProduct = (data, token) =>
 
 // Get all products
 export const getProducts = () => API.get("/products");
-
+// Get products by category
+export const getProductsByCategory = (category) =>
+  API.get(`/products/category/${category}`);
 // Get a single product by ID
 export const getProductById = (id) => API.get(`/products/${id}`);
 

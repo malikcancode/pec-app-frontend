@@ -3,10 +3,13 @@ import { FaCheckCircle } from "react-icons/fa";
 
 export default function StoreKYC() {
   const [form, setForm] = useState({
-    storeName: "",
-    ownerName: "",
+    name: "",
+    address: "",
+    phone: "",
     email: "",
-    document: null,
+    idNumber: "",
+    idFront: null,
+    idBack: null,
   });
 
   const handleChange = (e) => {
@@ -20,13 +23,30 @@ export default function StoreKYC() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!form.storeName || !form.ownerName || !form.email || !form.document) {
-      alert("Please fill in all fields before submitting.");
+    // Simple validation
+    if (
+      !form.name ||
+      !form.address ||
+      !form.phone ||
+      !form.email ||
+      !form.idNumber ||
+      !form.idFront ||
+      !form.idBack
+    ) {
+      alert("⚠️ Please fill in all fields before submitting.");
       return;
     }
 
     alert("✅ KYC verification submitted successfully!");
-    setForm({ storeName: "", ownerName: "", email: "", document: null });
+    setForm({
+      name: "",
+      address: "",
+      phone: "",
+      email: "",
+      idNumber: "",
+      idFront: null,
+      idBack: null,
+    });
   };
 
   return (
@@ -37,40 +57,58 @@ export default function StoreKYC() {
 
       <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100 max-w-lg mx-auto">
         <p className="text-gray-700 mb-4">
-          Submit your KYC documents here to verify your store and unlock more
-          selling features.
+          Submit your KYC documents here to verify your identity and unlock more
+          features.
         </p>
 
         {/* KYC Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Store Name
+              Full Name
             </label>
             <input
               type="text"
-              name="storeName"
-              value={form.storeName}
+              name="name"
+              value={form.name}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-              placeholder="Enter your store name"
+              placeholder="Enter your full name"
             />
           </div>
 
+          {/* Address */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Owner Name
+              Address (as per ID)
             </label>
             <input
               type="text"
-              name="ownerName"
-              value={form.ownerName}
+              name="address"
+              value={form.address}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-              placeholder="Enter owner's full name"
+              placeholder="Enter your address as per ID"
             />
           </div>
 
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+              placeholder="Enter your phone number"
+            />
+          </div>
+
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
@@ -85,6 +123,50 @@ export default function StoreKYC() {
             />
           </div>
 
+          {/* Identification Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Identification Number
+            </label>
+            <input
+              type="text"
+              name="idNumber"
+              value={form.idNumber}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+              placeholder="Enter ID / Driver’s License / Passport No."
+            />
+          </div>
+
+          {/* Upload Front Side */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Upload ID (Front Side)
+            </label>
+            <input
+              type="file"
+              name="idFront"
+              accept="image/*,.pdf"
+              onChange={handleChange}
+              className="w-full"
+            />
+          </div>
+
+          {/* Upload Back Side */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Upload ID (Back Side)
+            </label>
+            <input
+              type="file"
+              name="idBack"
+              accept="image/*,.pdf"
+              onChange={handleChange}
+              className="w-full"
+            />
+          </div>
+
+          {/* Submit */}
           <button
             type="submit"
             className="w-full bg-green-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-600 transition"

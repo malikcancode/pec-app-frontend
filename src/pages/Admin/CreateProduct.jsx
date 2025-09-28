@@ -107,7 +107,6 @@ function CreateProduct() {
               required
             />
           </div>
-
           <div className="mb-6">
             <label
               htmlFor="category"
@@ -115,15 +114,23 @@ function CreateProduct() {
             >
               Category
             </label>
-            <input
-              type="text"
+            <select
               id="category"
               name="category"
               value={formData.category}
               onChange={handleChange}
               className="w-full p-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300"
               required
-            />
+            >
+              <option value="">-- Select Category --</option>
+              <option value="Gadgets">Gadgets</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Shirts">Shirts</option>
+              <option value="Books">Books</option>
+              <option value="Home Decores">Home Decores</option>
+              <option value="Health & Wellness">Health & Wellness</option>
+            </select>
           </div>
 
           <div className="mb-6">

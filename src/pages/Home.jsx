@@ -1,6 +1,15 @@
 "use client";
 import { useNavigate } from "react-router-dom";
-import { FiMenu } from "react-icons/fi";
+import {
+  FiShoppingCart,
+  FiUsers,
+  FiBox,
+  FiTruck,
+  FiDollarSign,
+  FiCheckCircle,
+  FiTrendingUp,
+  FiGlobe,
+} from "react-icons/fi";
 
 function Home() {
   const navigate = useNavigate();
@@ -29,36 +38,18 @@ function Home() {
           >
             Sign up
           </button>
-          {/* <button className="p-2 text-gray-700 cursor-pointer hover:text-gray-900 transition-colors">
-            <FiMenu size={20} />
-          </button> */}
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Hero Section */}
       <main className="flex-1 flex flex-col justify-center px-4 md:px-6 w-full">
         <div className="text-center md:text-left w-full">
-          {/* Mobile (sm and below) */}
-          <h1 className="text-4xl font-bold text-black leading-tight mb-6 sm:hidden">
-            Global TOP1
-            <br />
-            brand
-            <br />
-            dropshipping
-            <br />
-            one-stop
-            <br />
-            solution.
-          </h1>
-
-          {/* Desktop (sm+) */}
-          <h1 className="hidden sm:block text-4xl md:text-6xl font-bold text-black leading-tight mb-6">
+          <h1 className="text-4xl sm:text-6xl font-bold text-black leading-tight mb-6">
             Global TOP1 brand dropshipping one-stop solution.
           </h1>
-
-          <p className="text-gray-700 text-lg md:text-xl mb-8 w-full">
+          <p className="text-gray-700 text-lg md:text-xl mb-8 w-full max-w-2xl">
             Great cooperation. Great development. Provide an integrated and
-            comprehensive brand drop shipping service.
+            comprehensive brand dropshipping service.
           </p>
 
           <button
@@ -70,10 +61,131 @@ function Home() {
         </div>
       </main>
 
+      {/* How It Works */}
+      <section className="px-6 py-12 bg-white">
+        <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
+          How It Works
+        </h2>
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+          {[
+            {
+              icon: <FiUsers />,
+              title: "Partner Onboarding",
+              desc: "Join the platform and create your own store.",
+            },
+            {
+              icon: <FiBox />,
+              title: "Product Selection",
+              desc: "Choose from a wide catalog to sell.",
+            },
+            {
+              icon: <FiShoppingCart />,
+              title: "Order Placement",
+              desc: "Customers order directly from your store.",
+            },
+            {
+              icon: <FiTruck />,
+              title: "Order Fulfillment",
+              desc: "We process, package, and ship products.",
+            },
+            {
+              icon: <FiDollarSign />,
+              title: "Partner Earnings",
+              desc: "Earn commissions on every sale.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="p-6 border rounded-lg shadow-sm hover:shadow-md transition bg-green-50 text-center"
+            >
+              <div className="text-green-600 text-3xl mb-4 flex justify-center">
+                {item.icon}
+              </div>
+              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+              <p className="text-sm text-gray-600">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Key Features */}
+      <section className="px-6 py-12 bg-green-50">
+        <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
+          Key Features
+        </h2>
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+          {[
+            {
+              icon: <FiBox />,
+              title: "Product Variety",
+              desc: "Huge catalog of products ready to sell.",
+            },
+            {
+              icon: <FiCheckCircle />,
+              title: "Easy Store Management",
+              desc: "User-friendly dashboard for partners.",
+            },
+            {
+              icon: <FiTruck />,
+              title: "Timely Shipping",
+              desc: "Fast and reliable delivery to customers.",
+            },
+            {
+              icon: <FiUsers />,
+              title: "Customer Support",
+              desc: "Dedicated support for you and your buyers.",
+            },
+            {
+              icon: <FiTrendingUp />,
+              title: "Performance Tracking",
+              desc: "Monitor sales, earnings, and growth.",
+            },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="p-6 border rounded-lg shadow-sm hover:shadow-md transition bg-white text-center"
+            >
+              <div className="text-green-600 text-3xl mb-4 flex justify-center">
+                {item.icon}
+              </div>
+              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+              <p className="text-sm text-gray-600">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Comparison */}
+      <section className="px-6 py-12 bg-white">
+        <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
+          Why Choose Us?
+        </h2>
+        <div className="grid sm:grid-cols-2 gap-8">
+          <div className="p-6 border rounded-lg bg-green-50">
+            <h3 className="text-xl font-semibold mb-4">Our Platform</h3>
+            <ul className="space-y-2 text-gray-700">
+              <li>✅ Competitive commission rates</li>
+              <li>✅ Wide product range</li>
+              <li>✅ Reliable & fast shipping</li>
+              <li>✅ Dedicated customer support</li>
+            </ul>
+          </div>
+          <div className="p-6 border rounded-lg bg-gray-50">
+            <h3 className="text-xl font-semibold mb-4">Other Platforms</h3>
+            <ul className="space-y-2 text-gray-700">
+              <li>❌ Higher commissions</li>
+              <li>❌ Limited product selection</li>
+              <li>❌ Slower & unreliable shipping</li>
+              <li>❌ Minimal support</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="p-4 md:p-6 w-full">
-        <p className="text-gray-600 text-center md:text-left w-full">
-          Discover why millions of entrepreneurs choose PEC to build their
+      <footer className="p-6 bg-green-100 text-center text-gray-700">
+        <p>
+          Discover why millions of entrepreneurs choose PSC to build their
           business — from hello world to IPO.
         </p>
       </footer>
