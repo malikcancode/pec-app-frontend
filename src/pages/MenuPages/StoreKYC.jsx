@@ -7,6 +7,7 @@ export default function StoreKYC() {
     address: "",
     phone: "",
     email: "",
+    idType: "", // ✅ new field
     idNumber: "",
     idFront: null,
     idBack: null,
@@ -29,6 +30,7 @@ export default function StoreKYC() {
       !form.address ||
       !form.phone ||
       !form.email ||
+      !form.idType || // ✅ check added
       !form.idNumber ||
       !form.idFront ||
       !form.idBack
@@ -43,6 +45,7 @@ export default function StoreKYC() {
       address: "",
       phone: "",
       email: "",
+      idType: "",
       idNumber: "",
       idFront: null,
       idBack: null,
@@ -123,6 +126,24 @@ export default function StoreKYC() {
             />
           </div>
 
+          {/* ID Type Dropdown */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Identification Type
+            </label>
+            <select
+              name="idType"
+              value={form.idType}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
+            >
+              <option value="">Select ID Type</option>
+              <option value="idCard">ID Card</option>
+              <option value="passport">Passport</option>
+              <option value="driverLicense">Driver License</option>
+            </select>
+          </div>
+
           {/* Identification Number */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -134,7 +155,7 @@ export default function StoreKYC() {
               value={form.idNumber}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none"
-              placeholder="Enter ID / Driver’s License / Passport No."
+              placeholder="Enter ID / Passport / License No."
             />
           </div>
 

@@ -1,89 +1,80 @@
 "use client";
 
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { FaArrowLeft, FaCheck } from "react-icons/fa";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useOrders } from "../context/OrderContext";
 
-function OrderDetails() {
-  const { orderId } = useParams();
-  const navigate = useNavigate();
+export default function OrderDetails() {
+  const { orderId } = useParams(); // from URL
   const location = useLocation();
-  const orderData = location.state?.order;
+  const navigate = useNavigate();
+  const { orders } = useOrders();
 
-  // If orderData is not available, you can fetch it from API or show a message
-  if (!orderData) {
+  // Prefer order from navigation state (fast), fallback to context (page reload)
+  const order = location.state?.order || orders.find((o) => o.id === orderId);
+
+  if (!order) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
+      <div className="p-6">
+        <h1 className="text-xl font-semibold text-gray-900 mb-4">
+          Order Not Found
+        </h1>
         <button
           onClick={() => navigate(-1)}
-          className="mb-4 p-2 hover:bg-gray-200 rounded-lg transition-colors"
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
-          <FaArrowLeft className="text-gray-600" size={16} />
+          Go Back
         </button>
-        <h1 className="text-lg font-semibold text-gray-900 mb-2">
-          Order not found
-        </h1>
-        <p className="text-gray-600">Please go back and select an order.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header */}
-      <div className="flex items-center mb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="mr-4 p-2 hover:bg-gray-200 rounded-lg transition-colors"
-        >
-          <FaArrowLeft className="text-gray-600" size={16} />
-        </button>
-        <h1 className="text-lg font-semibold text-gray-900">Order Details</h1>
-      </div>
+    <div className="p-6">
+      <h1 className="text-xl font-semibold text-gray-900 mb-4">
+        Order Details
+      </h1>
 
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Products Section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Products</h2>
+      {/* Order Info */}
+      <div className="bg-white rounded-lg shadow border p-4 mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-sm text-gray-600">Order ID: {order.id}</span>
+          <span className="text-sm text-green-600 font-medium">
+            {order.status}
+          </span>
+        </div>
 
-          <div className="flex items-center space-x-4 mb-6">
-            {/* Product Image */}
-            <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
-              <img
-                src={orderData.image || "/placeholder.svg"}
-                alt={orderData.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Product Details */}
-            <div className="flex-1">
-              <h3 className="font-medium text-gray-900 mb-2">
-                {orderData.name}
-              </h3>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-400 line-through">
-                  ${orderData.originalPrice}
-                </span>
-                <span className="text-sm font-semibold text-gray-900">
-                  ${orderData.currentPrice} * {orderData.quantity}
-                </span>
-              </div>
-            </div>
+        <div className="flex items-center space-x-4">
+          <div className="w-20 h-20 bg-gray-100 rounded overflow-hidden">
+            <img
+              src={order.product.image || "/placeholder.svg"}
+              alt={order.product.name}
+              className="w-full h-full object-cover"
+            />
           </div>
-
-          {/* Order Summary */}
-          <div className="border-t border-gray-200 pt-4 space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Order status</span>
-              <span className="font-semibold text-gray-900">
-                {orderData.status}
-              </span>
-            </div>
+          <div>
+            <h3 className="font-medium text-gray-900">{order.product.name}</h3>
+            <p className="text-sm text-gray-600">
+              ${order.product.price?.toFixed(2)} × 1
+            </p>
           </div>
         </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center space-x-3">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Back
+        </button>
+        <button className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+          Transfer
+        </button>
+        <button className="flex-1 py-2 px-4 bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors">
+          Payment
+        </button>
       </div>
     </div>
   );
 }
-
-export default OrderDetails;

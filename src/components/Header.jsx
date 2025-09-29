@@ -1,7 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
-  FaBell,
-  FaUser,
   FaChevronRight,
   FaBars,
   FaTimes,
@@ -24,15 +22,14 @@ import {
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { user, logout } = useContext(AuthContext); // ✅ destructure logout
+  const { user, logout } = useContext(AuthContext);
 
   const navLinks = [
-    { name: "PSC Wallet", href: "/wallet", icon: <FaWallet /> },
+    { name: "Psc Wallet", href: "/wallet", icon: <FaWallet /> },
     { name: "My Orders", href: "/my-orders", icon: <FaShoppingBag /> },
     {
       name: "My Wishlist & Followed Store",
@@ -40,15 +37,10 @@ export default function Header() {
       icon: <FaHeart />,
     },
     { name: "My Cart", href: "/cart", icon: <FaShoppingBag /> },
-
-    { name: " Partner Stores", href: "/referral", icon: <FaUsers /> },
-    {
-      name: "Store KYC Verification",
-      href: "/kyc",
-      icon: <FaCheckCircle />,
-    },
+    { name: "Partner Stores", href: "/referral", icon: <FaUsers /> },
+    { name: "Store KYC Verification", href: "/kyc", icon: <FaCheckCircle /> },
     { name: "Chat with Us", href: "/chat", icon: <FaComments /> },
-    { name: "Messages", href: "/messages", icon: <FaEnvelope /> },
+    { name: "Announce", href: "/messages", icon: <FaEnvelope /> },
     { name: "My Returns", href: "/returns", icon: <FaUndo /> },
     {
       name: "My Cancellation",
@@ -75,17 +67,28 @@ export default function Header() {
             to="/products"
             className="font-bold text-green-600 capitalize sm:text-sm text-xs"
           >
-            {" "}
             PSC
           </Link>
         </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
-          {/* <FaBell className="text-gray-600 text-lg cursor-pointer" /> */}
+          {/* Profile Avatar */}
           <Link to="/profile">
-            <FaUser className="text-gray-600 text-lg cursor-pointer" />
+            {user?.profileImage ? (
+              <img
+                src={user.profileImage}
+                alt="Profile"
+                className="w-8 h-8 rounded-full object-cover border border-gray-300 cursor-pointer"
+              />
+            ) : (
+              <div className="w-8 h-8 bg-green-100 text-green-600 flex items-center justify-center rounded-full text-sm font-bold cursor-pointer">
+                {user?.name?.charAt(0).toUpperCase() || "G"}
+              </div>
+            )}
           </Link>
+
+          {/* Language Switch */}
           <div className="flex items-center gap-1 cursor-pointer">
             <img
               src="/united-kingdom.png"
@@ -96,7 +99,7 @@ export default function Header() {
             <FaChevronRight className="text-gray-400 text-xs" />
           </div>
 
-          {/* Hamburger Menu (Right Side) */}
+          {/* Hamburger Menu */}
           <button
             className="md:hidden w-8 h-8 bg-gray-800 rounded flex items-center justify-center"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -106,7 +109,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Dropdown with Framer Motion */}
+      {/* Mobile Dropdown */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -119,14 +122,26 @@ export default function Header() {
             {/* Header with Profile */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-green-50">
               <div className="flex items-center gap-3">
-                <FaUser className="w-10 h-10 text-gray-500 bg-gray-200 rounded-full p-2" />
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover border border-gray-300"
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-green-100 text-green-600 flex items-center justify-center rounded-full text-lg font-bold">
+                    {user?.name?.charAt(0).toUpperCase() || "G"}
+                  </div>
+                )}
                 <div>
                   <Link to="/profile" onClick={() => setMenuOpen(false)}>
                     <h4 className="font-semibold text-gray-800">
                       {user?.name || "Guest"}
                     </h4>
                   </Link>
-                  <p className="text-sm text-gray-500">View your profile</p>
+                  <p className="text-sm text-gray-500">
+                    {user?.isVerified ? "Verified User" : "Unverified"}
+                  </p>
                 </div>
               </div>
 
@@ -155,6 +170,7 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Sign Out */}
             <div className="border-t border-gray-200 p-4">
               <button
                 onClick={() => {

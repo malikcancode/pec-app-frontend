@@ -19,7 +19,7 @@ export default function Cart() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {cart.map((item) => (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 flex flex-col"
                 >
                   {/* Product Image */}

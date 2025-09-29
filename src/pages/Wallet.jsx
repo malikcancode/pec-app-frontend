@@ -100,7 +100,7 @@ export default function Wallet() {
     <div className="flex flex-col min-h-screen bg-gray-50">
       <main className="flex-grow py-6 pb-20 w-full max-w-full mx-auto">
         {/* My Assets Section */}
-        <div className="bg-green-500 shadow-sm p-6 mb-6">
+        <div className="bg-green-500 rounded-3xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
             <MdAccountBalance className="mr-2 text-white" /> My Assets
           </h2>

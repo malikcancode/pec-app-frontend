@@ -1,22 +1,25 @@
 import { useProducts } from "../../context/ProductsContext";
-import {
-  FaMobileAlt,
-  FaLaptop,
-  FaShoePrints,
-  FaTshirt,
-  FaBook,
-  FaCouch,
-  FaHeartbeat,
-} from "react-icons/fa";
+import { FiFilter, FiStar, FiSquare, FiTag } from "react-icons/fi";
 
 const categories = [
-  { name: "Gadgets", icon: FaMobileAlt },
-  { name: "Electronics", icon: FaLaptop },
-  { name: "Shoes", icon: FaShoePrints },
-  { name: "Shirts", icon: FaTshirt },
-  { name: "Books", icon: FaBook },
-  { name: "Home Decores", icon: FaCouch },
-  { name: "Health & Wellness", icon: FaHeartbeat },
+  { name: "Gadgets", icon: "📦" },
+  { name: "Electronics", icon: "🔌" },
+  { name: "Shoes", icon: "👟" },
+  { name: "Shirts", icon: "👕" },
+  { name: "Books", icon: "📕" },
+  { name: "Home Decores", icon: "🏠" },
+  { name: "Health & Wellness", icon: "🩺" },
+];
+
+const filters = [
+  { name: "Filter", icon: <FiFilter /> },
+  { name: "Rating", icon: <FiStar /> },
+  { name: "Size", icon: <FiSquare /> },
+  // {
+  //   name: "Color",
+  //   icon: <span className="w-3 h-3 rounded-full bg-red-500 inline-block" />,
+  // },
+  { name: "Brand", icon: <FiTag /> },
 ];
 
 export default function ProductsHeader() {
@@ -24,7 +27,7 @@ export default function ProductsHeader() {
     useProducts();
 
   return (
-    <div className="bg-white rounded-2xl p-4 mb-6">
+    <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm">
       {/* Search + Dropdown */}
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
         <input
@@ -48,25 +51,36 @@ export default function ProductsHeader() {
         </select>
       </div>
 
+      {/* Filter Options */}
+      <div className="flex gap-2 overflow-x-auto mb-4 no-scrollbar">
+        {filters.map((f, i) => (
+          <button
+            key={i}
+            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-gray-50 hover:bg-blue-50 border rounded-3xl border-gray-100 hover:text-blue-600 transition whitespace-nowrap"
+          >
+            {f.icon} {f.name}
+          </button>
+        ))}
+      </div>
+
       {/* Category Icons */}
-      <div className="grid grid-cols-3 sm:flex sm:flex-wrap sm:justify-start gap-3">
+      <div className="grid grid-cols-5 sm:flex sm:flex-wrap sm:justify-start gap-3">
         {categories.map((cat) => {
-          const Icon = cat.icon;
           const isActive = selectedCategory === cat.name;
           return (
             <button
               key={cat.name}
               onClick={() => setSelectedCategory(isActive ? "" : cat.name)}
-              className={`flex flex-col items-center p-2 rounded-xl border transition-colors text-center
-                ${
-                  isActive
-                    ? "bg-green-100 border-green-500 text-green-700"
-                    : "bg-gray-50 hover:bg-gray-100 text-gray-600"
-                }
-              `}
+              className={`flex flex-col items-center justify-center w-20 h-auto text-center transition 
+          ${
+            isActive
+              ? "bg-green-500 text-white rounded-2xl"
+              : "bg-gray-50 hover:bg-gray-100 text-gray-600 border rounded-2xl border-gray-300"
+          }
+        `}
             >
-              <Icon size={18} className="mb-1" />
-              <span className="text-[10px] sm:text-xs">{cat.name}</span>
+              <span className="text-2xl mb-1">{cat.icon}</span>
+              <span className="text-[12px] sm:text-xs">{cat.name}</span>
             </button>
           );
         })}

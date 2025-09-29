@@ -23,6 +23,26 @@ export default function Profile() {
     return <p className="text-center mt-10">Loading profile...</p>;
   }
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      const { data } = await updateProfile(token, { profileImage: file });
+      setUser(data.user); // update context with new image
+      setProfileImage(null);
+      alert("Profile image updated!");
+    } catch (err) {
+      console.error("Image upload error:", err);
+      alert(
+        "Error uploading image: " + (err.response?.data?.error || err.message)
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCopyReferral = () => {
     navigator.clipboard.writeText(user.referralCode || "N/A");
     alert("Referral code copied to clipboard!");
@@ -137,7 +157,7 @@ export default function Profile() {
               <input
                 type="file"
                 className="hidden"
-                onChange={(e) => setProfileImage(e.target.files[0])}
+                onChange={handleImageUpload}
               />
             </label>
           </div>

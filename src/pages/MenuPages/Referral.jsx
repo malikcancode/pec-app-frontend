@@ -63,7 +63,7 @@ export default function Referral() {
         {referrals.length === 0 ? (
           <p className="text-gray-500 text-sm">No referrals yet.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {referrals.map((referral) => (
               <div
                 key={referral.id}

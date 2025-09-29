@@ -50,6 +50,14 @@ function Footer() {
 
           {/* Payment */}
           <div>
+            <h3 className="font-semibold text-gray-800 mb-3">
+              Dropshipping Partners
+            </h3>
+            <div className="flex flex-wrap justify-start gap-3 sm:justify-start">
+              <img src="/dropshipping.png" alt="Payment method" />
+            </div>
+          </div>
+          <div>
             <h3 className="font-semibold text-gray-800 mb-3">Payment</h3>
             <div className="flex flex-wrap justify-start gap-3 sm:justify-start">
               <img

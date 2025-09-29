@@ -9,9 +9,11 @@ export default function Settings() {
     storeName: "",
     email: "",
     phone: "",
+    bankName: "",
     accountNumber: "",
     ifscCode: "",
     accountHolder: "",
+    trc20Wallet: "",
   });
 
   // Prefill with user data from context
@@ -22,9 +24,11 @@ export default function Settings() {
         storeName: user.name || "",
         email: user.email || "",
         phone: user.phone || "",
+        bankName: user.bankName || "",
         accountNumber: user.accountNumber || "",
         ifscCode: user.ifscCode || "",
         accountHolder: user.accountHolder || "",
+        trc20Wallet: user.trc20Wallet || "",
       }));
     }
   }, [user]);
@@ -40,16 +44,18 @@ export default function Settings() {
       !form.storeName ||
       !form.email ||
       !form.phone ||
+      !form.bankName ||
       !form.accountNumber ||
       !form.ifscCode ||
-      !form.accountHolder
+      !form.accountHolder ||
+      !form.trc20Wallet
     ) {
       alert("⚠️ Please fill all fields.");
       return;
     }
 
     alert("✅ Store settings updated successfully!");
-    // 👉 Here you would call your API to update store settings
+    // 👉 Here you would call your API to update store + withdrawal settings
   };
 
   return (
@@ -112,6 +118,21 @@ export default function Settings() {
             Withdrawal Bank Details
           </h2>
 
+          {/* Bank Name */}
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Bank Name
+            </label>
+            <input
+              type="text"
+              name="bankName"
+              value={form.bankName}
+              onChange={handleChange}
+              placeholder="Enter your bank name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+            />
+          </div>
+
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Account Number
@@ -150,6 +171,25 @@ export default function Settings() {
               value={form.accountHolder}
               onChange={handleChange}
               placeholder="Enter account holder name"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+            />
+          </div>
+
+          {/* Crypto Wallet Section */}
+          <h2 className="text-lg font-semibold text-gray-800 mt-6">
+            Crypto Wallet (TRC20)
+          </h2>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              TRC20 Wallet Address
+            </label>
+            <input
+              type="text"
+              name="trc20Wallet"
+              value={form.trc20Wallet}
+              onChange={handleChange}
+              placeholder="Enter your TRC20 wallet address"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
             />
           </div>

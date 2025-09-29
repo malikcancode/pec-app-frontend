@@ -8,7 +8,6 @@ import {
   FiDollarSign,
   FiCheckCircle,
   FiTrendingUp,
-  FiGlobe,
 } from "react-icons/fi";
 
 function Home() {
@@ -66,7 +65,7 @@ function Home() {
         <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
           How It Works
         </h2>
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 text-center">
           {[
             {
               icon: <FiUsers />,
@@ -94,14 +93,9 @@ function Home() {
               desc: "Earn commissions on every sale.",
             },
           ].map((item, i) => (
-            <div
-              key={i}
-              className="p-6 border rounded-lg shadow-sm hover:shadow-md transition bg-green-50 text-center"
-            >
-              <div className="text-green-600 text-3xl mb-4 flex justify-center">
-                {item.icon}
-              </div>
-              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+            <div key={i} className="flex flex-col items-center">
+              <div className="text-green-600 text-3xl mb-3">{item.icon}</div>
+              <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
               <p className="text-sm text-gray-600">{item.desc}</p>
             </div>
           ))}
@@ -113,7 +107,7 @@ function Home() {
         <h2 className="text-3xl font-bold text-center text-green-600 mb-8">
           Key Features
         </h2>
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 text-center">
           {[
             {
               icon: <FiBox />,
@@ -141,14 +135,9 @@ function Home() {
               desc: "Monitor sales, earnings, and growth.",
             },
           ].map((item, i) => (
-            <div
-              key={i}
-              className="p-6 border rounded-lg shadow-sm hover:shadow-md transition bg-white text-center"
-            >
-              <div className="text-green-600 text-3xl mb-4 flex justify-center">
-                {item.icon}
-              </div>
-              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+            <div key={i} className="flex flex-col items-center">
+              <div className="text-green-600 text-3xl mb-3">{item.icon}</div>
+              <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
               <p className="text-sm text-gray-600">{item.desc}</p>
             </div>
           ))}
@@ -161,7 +150,7 @@ function Home() {
           Why Choose Us?
         </h2>
         <div className="grid sm:grid-cols-2 gap-8">
-          <div className="p-6 border rounded-lg bg-green-50">
+          <div>
             <h3 className="text-xl font-semibold mb-4">Our Platform</h3>
             <ul className="space-y-2 text-gray-700">
               <li>✅ Competitive commission rates</li>
@@ -170,7 +159,7 @@ function Home() {
               <li>✅ Dedicated customer support</li>
             </ul>
           </div>
-          <div className="p-6 border rounded-lg bg-gray-50">
+          <div>
             <h3 className="text-xl font-semibold mb-4">Other Platforms</h3>
             <ul className="space-y-2 text-gray-700">
               <li>❌ Higher commissions</li>
