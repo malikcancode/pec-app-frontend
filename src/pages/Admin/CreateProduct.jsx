@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../api/productsApi";
@@ -44,12 +45,11 @@ function CreateProduct() {
 
     try {
       const response = await createProduct(productFormData, token);
-      console.log("Product Created:", response.data);
+      toast.success("✅ Product created successfully!");
       navigate("/admin/admin-products");
     } catch (error) {
-      console.error("Server responded with error:", error.response.data);
-      console.error("Error in setup:", error.message);
-      console.error("No response received:", error.request);
+      // Show generic error message
+      toast.error("❌ Failed to create product. Please try again.");
       console.error("Error creating product:", error);
     }
   };

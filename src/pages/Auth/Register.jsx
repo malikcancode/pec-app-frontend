@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FiBell, FiUser, FiEye, FiEyeOff } from "react-icons/fi";
 import { registerWithUsername, registerWithOtp, sendOtp } from "../../api/api";
 import { AuthContext } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -24,19 +25,19 @@ export default function Register() {
   });
 
   const handleObtainCode = async () => {
-    if (!formData.email) return alert("Enter your email first");
+    if (!formData.email) return toast.error("Enter your email first!");
 
     // Basic email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email))
-      return alert("Please enter a valid email address");
+      return toast.error("Please enter a valid email address");
 
     try {
       await sendOtp({ email: formData.email });
       setOtpSent(true);
-      alert("OTP sent to your email!");
+      toast.success("OTP sent to your email!");
     } catch (err) {
-      alert(err.response?.data?.error || "Error sending OTP");
+      toast.error("Error sending OTP");
     }
   };
 
@@ -44,10 +45,11 @@ export default function Register() {
     e.preventDefault();
 
     if (activeTab === "Email") {
-      if (!otpSent) return alert("Obtain OTP first");
-      if (!formData.verificationCode) return alert("Enter OTP");
-      if (!formData.password) return alert("Set password");
-      if (!agreed) return alert("Agree to terms");
+      if (!otpSent) return toast.error("Obtain OTP first");
+
+      if (!formData.verificationCode) return toast.error("Enter OTP");
+      if (!formData.password) return toast.error("Set password");
+      if (!agreed) return toast.error("Agree to terms");
 
       try {
         const res = await registerWithOtp({
@@ -57,18 +59,18 @@ export default function Register() {
           referredBy: formData.invitationCode || null,
         });
 
-        alert("Registration successful!");
+        toast.success("Registration successful!");
         login(res.data.token);
         navigate("/products"); // Only user page navigation
       } catch (err) {
-        alert(err.response?.data?.error || "OTP verification failed");
+        toast.error("OTP verification failed");
       }
     }
 
     if (activeTab === "Account") {
-      if (!formData.username) return alert("Enter username");
-      if (!formData.password) return alert("Enter password");
-      if (!agreed) return alert("Agree to terms");
+      if (!formData.username) return toast.error("Enter username");
+      if (!formData.password) return toast.error("Enter password");
+      if (!agreed) return toast.error("Agree to terms");
 
       try {
         const res = await registerWithUsername({
@@ -77,11 +79,11 @@ export default function Register() {
           referredBy: formData.invitationCode || null,
         });
 
-        alert("Account registration successful!");
+        toast.success("Account registration successful!");
         login(res.data.token);
         navigate("/products"); // Only user page navigation
       } catch (err) {
-        alert(err.response?.data?.error || "Account registration failed");
+        toast.error("Account registration failed");
       }
     }
   };

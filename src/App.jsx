@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Import your Spinner component for loading indication
 import Spinner from "./components/Spinner";
@@ -21,6 +23,8 @@ import Settings from "./pages/MenuPages/Settings";
 import Feedback from "./pages/MenuPages/Feedback";
 import Help from "./pages/MenuPages/Help";
 import ProductDetails from "./components/Products/ProductDetails";
+import KycDetails from "./pages/MenuPages/KycDetails";
+import ChatSupport from "./pages/ChatSupport";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -172,6 +176,17 @@ function App() {
             />
 
             <Route
+              path="/kyc-details"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <DashboardLayout>
+                    <KycDetails />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
               path="/chat"
               element={
                 <ProtectedRoute allowedRoles={["user"]}>
@@ -258,6 +273,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/chat-support"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <DashboardLayout>
+                    <ChatSupport />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path="/orders/:orderId"
@@ -339,6 +364,17 @@ function App() {
             {/* Fallback Route */}
             <Route path="*" element={<p>Page Not Found</p>} />
           </Routes>
+          {/* ✅ Toast container here */}
+          <ToastContainer
+            position="top-right"
+            autoClose={1200}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            pauseOnHover
+            draggable
+            theme="light"
+          />
         </Suspense>
       </Router>
     </AuthProvider>

@@ -13,7 +13,7 @@ export default function Header() {
         </div>
         <div>
           <p className="text-sm text-gray-600">Welcome Back</p>
-          <p className="font-semibold text-gray-900">uix.vikram ❤️</p>
+          <p className="font-semibold text-gray-900"></p>
         </div>
       </div>
       <div className="relative">

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FaTimes, FaCheckCircle } from "react-icons/fa";
 import { SiTether, SiVisa, SiMastercard } from "react-icons/si";
+import { useNavigate } from "react-router-dom"; // ✅ for navigation
 
 export default function PaymentConfirmationModal({
   isOpen,
@@ -12,7 +13,8 @@ export default function PaymentConfirmationModal({
   onConfirm,
 }) {
   const [activeTab, setActiveTab] = useState("online");
-  const [selectedPayment, setSelectedPayment] = useState(null); // No default selection
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -21,8 +23,29 @@ export default function PaymentConfirmationModal({
       alert("Please select a payment method");
       return;
     }
-    onConfirm(selectedPayment); // Pass selected method to parent
+    onConfirm(selectedPayment);
   };
+
+  const offlineOptions = [
+    { id: 1, name: "Bank Transfer", img: "/public/bank.png" },
+    {
+      id: 2,
+      name: "Easypaisa",
+      img: "/Easypaisa-logo.png",
+    },
+    {
+      id: 3,
+      name: "JazzCash",
+      img: "/new-Jazzcash-logo.png",
+    },
+    {
+      id: 4,
+      name: "Bkash",
+      img: "/bkash.webp",
+    },
+    { id: 5, name: "Nagad", img: "/nagad.png" },
+    { id: 5, name: "UPI", img: "/upi.jpg" },
+  ];
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
@@ -78,59 +101,92 @@ export default function PaymentConfirmationModal({
             </button>
           </div>
 
-          {/* Payment Options */}
-          <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-900 mb-3">
-              Payment options
-            </h3>
+          {/* Online Deposit Options */}
+          {activeTab === "online" && (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-gray-900 mb-3">
+                Payment options
+              </h3>
 
-            {/* Tether Option */}
-            <div
-              onClick={() => setSelectedPayment("tether")}
-              className={`relative bg-green-500 p-4 mb-3 cursor-pointer transition-all ${
-                selectedPayment === "tether" ? "ring-2 ring-green-600" : ""
-              }`}
-            >
-              <div className="flex items-center justify-between text-white">
-                <div>
-                  <div className="font-semibold text-lg">Tether</div>
-                  <div className="text-sm opacity-90">USDT (TRC20)</div>
+              {/* Tether Option */}
+              <div
+                onClick={() => setSelectedPayment("tether")}
+                className={`relative bg-green-500 p-4 mb-3 cursor-pointer transition-all ${
+                  selectedPayment === "tether" ? "ring-2 ring-green-600" : ""
+                }`}
+              >
+                <div className="flex items-center justify-between text-white">
+                  <div>
+                    <div className="font-semibold text-lg">Tether</div>
+                    <div className="text-sm opacity-90">USDT (TRC20)</div>
+                  </div>
+                  <SiTether size={32} className="text-white" />
                 </div>
-                <SiTether size={32} className="text-white" />
+                {selectedPayment === "tether" && (
+                  <div className="absolute top-2 right-2">
+                    <FaCheckCircle className="text-white" size={20} />
+                  </div>
+                )}
               </div>
-              {selectedPayment === "tether" && (
-                <div className="absolute top-2 right-2">
-                  <FaCheckCircle className="text-white" size={20} />
-                </div>
-              )}
-            </div>
 
-            {/* Card Options */}
-            <div
-              onClick={() => setSelectedPayment("card")}
-              className={`relative bg-gray-100 p-4 cursor-pointer transition-all ${
-                selectedPayment === "card" ? "ring-2 ring-green-600" : ""
-              }`}
-            >
-              <div className="flex items-center justify-center space-x-4">
-                <SiVisa size={32} />
-                <SiMastercard size={32} />
+              {/* Card Options */}
+              <div
+                onClick={() => setSelectedPayment("card")}
+                className={`relative bg-gray-100 p-4 cursor-pointer transition-all ${
+                  selectedPayment === "card" ? "ring-2 ring-green-600" : ""
+                }`}
+              >
+                <div className="flex items-center justify-center space-x-4">
+                  <SiVisa size={32} />
+                  <SiMastercard size={32} />
+                </div>
+                {selectedPayment === "card" && (
+                  <div className="absolute top-2 right-2">
+                    <FaCheckCircle className="text-green-600" size={20} />
+                  </div>
+                )}
               </div>
-              {selectedPayment === "card" && (
-                <div className="absolute top-2 right-2">
-                  <FaCheckCircle className="text-green-600" size={20} />
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* Confirm Button */}
-          <button
-            onClick={() => handlePayment(selectedPayment)}
-            className="w-full py-3 font-medium bg-green-500 text-white hover:bg-green-600 transition-colors"
-          >
-            Continue
-          </button>
+              {/* Confirm Button */}
+              <button
+                onClick={() => handlePayment(selectedPayment)}
+                className="w-full mt-4 py-3 font-medium bg-green-500 text-white hover:bg-green-600 transition-colors"
+              >
+                Continue
+              </button>
+            </div>
+          )}
+
+          {/* Offline Deposit Options */}
+          {activeTab === "offline" && (
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-gray-900 mb-3">
+                Select a method
+              </h3>
+              <div className="grid grid-cols-3 gap-3">
+                {offlineOptions.map((opt) => (
+                  <div
+                    key={opt.id}
+                    className="bg-green-500 hover:bg-green-600 transition-colors p-3 flex flex-col items-center justify-center rounded-lg cursor-pointer"
+                    onClick={() =>
+                      navigate("/chat-support", {
+                        state: { method: opt.name, amount },
+                      })
+                    }
+                  >
+                    <img
+                      src={opt.img}
+                      alt={opt.name}
+                      className="w-12 h-12 object-contain mb-2"
+                    />
+                    <p className="text-xs font-medium text-white text-center">
+                      {opt.name}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

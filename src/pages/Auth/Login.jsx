@@ -9,7 +9,8 @@ import {
   loginWithOtp,
   loginWithUsername,
   loginAdmin,
-} from "../../api/api"; // ✅ import loginAdmin
+} from "../../api/api";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { login } = useContext(AuthContext);
@@ -18,7 +19,7 @@ export default function Login() {
   const [activeTab, setActiveTab] = useState("Email");
   const [agreed, setAgreed] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [role, setRole] = useState("user"); // Added state for user/admin selection
+  const [role, setRole] = useState("user");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -29,27 +30,27 @@ export default function Login() {
 
   // Step 1: Obtain OTP
   const handleObtainCode = async () => {
-    if (!formData.email) return alert("Enter your email first");
+    if (!formData.email) return toast.error("Enter your email first!");
 
     try {
       await sendOtp({ email: formData.email });
       setOtpSent(true);
-      alert("OTP sent to your email!");
+      toast.success("OTP sent to your email!");
     } catch (err) {
-      alert(err.response?.data?.error || "Failed to send OTP");
+      toast.error("Failed to send OTP");
     }
   };
 
-  // Step 2: Handle Submit (depends on tab)
+  // Step 2: Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!agreed)
-      return alert("Please agree to the service agreement and privacy policy");
+    if (!agreed) return toast.warning("Please agree to the policies first!");
 
+    // ✅ Email OTP login
     if (activeTab === "Email") {
-      if (!otpSent) return alert("Obtain OTP first");
-      if (!formData.verificationCode) return alert("Enter OTP");
+      if (!otpSent) return toast.error("Please obtain OTP first!");
+      if (!formData.verificationCode) return toast.error("Enter OTP please!");
 
       try {
         const res = await loginWithOtp({
@@ -57,27 +58,28 @@ export default function Login() {
           otp: formData.verificationCode,
         });
 
-        login(res.data.token, res.data.user.role); // pass role to context
-        alert("Login successful!");
-        // Role-based navigation
+        login(res.data.token, res.data.user.role);
+        toast.success("Login successful 🎉");
+
         if (res.data.user.role === "user") {
           navigate("/products");
         } else {
           navigate("/admin");
         }
       } catch (err) {
-        console.error(err);
-        alert(err.response?.data?.error || "Login failed");
+        toast.error("Login failed");
       }
     }
 
+    // ✅ Username + Password login
     if (activeTab === "Account") {
-      if (!formData.username) return alert("Enter username");
-      if (!formData.password) return alert("Enter password");
+      if (!formData.username) return toast.error("Enter your username!");
+      if (!formData.password) return toast.error("Enter your password!");
 
       try {
         let res;
         let userRole = role;
+
         if (role === "admin") {
           res = await loginAdmin({
             username: formData.username,
@@ -92,8 +94,8 @@ export default function Login() {
           userRole = res.data.user.role;
         }
 
-        login(res.data.token, userRole); // pass role to context
-        alert("Login successful!");
+        login(res.data.token, userRole);
+        toast.success("Login successful 🎉");
 
         if (userRole === "admin") {
           navigate("/admin");
@@ -101,8 +103,7 @@ export default function Login() {
           navigate("/products");
         }
       } catch (err) {
-        console.error(err);
-        alert(err.response?.data?.error || "Account login failed");
+        toast.error(err.response?.data?.error || "Account login failed");
       }
     }
   };
@@ -154,6 +155,7 @@ export default function Login() {
           {/* Account Login */}
           {activeTab === "Account" && (
             <form onSubmit={handleSubmit} className="space-y-4 w-full">
+              {/* Username */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Username
@@ -170,6 +172,7 @@ export default function Login() {
                 />
               </div>
 
+              {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Password
@@ -186,7 +189,7 @@ export default function Login() {
                 />
               </div>
 
-              {/* Role Dropdown */}
+              {/* Role */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Role
@@ -224,16 +227,10 @@ export default function Login() {
             </form>
           )}
 
-          {/* Mobile Login (coming soon)
-          {activeTab === "Mobile" && (
-            <p className="text-center text-gray-500 py-10">
-              Mobile login coming soon 🚧
-            </p>
-          )} */}
-
           {/* Email Login */}
           {activeTab === "Email" && (
             <form onSubmit={handleSubmit} className="space-y-4 w-full">
+              {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   E-mail
@@ -250,6 +247,7 @@ export default function Login() {
                 />
               </div>
 
+              {/* OTP */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Verification Code

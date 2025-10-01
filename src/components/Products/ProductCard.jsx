@@ -2,22 +2,18 @@ import { useState } from "react";
 import { FiHeart } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { useWishlist } from "../../context/WishlistContext";
-import { useCart } from "../../context/CartContext";
 import OrderModal from "../../components/OrderModal";
 
 export default function ProductCard({ product }) {
   const { wishlist, toggleWishlist } = useWishlist();
-  const { cart, addToCart, removeFromCart } = useCart();
-
   const [showModal, setShowModal] = useState(false);
 
   const isLiked = wishlist.some((item) => item._id === product._id);
-  const inCart = cart.some((item) => item._id === product._id);
 
   return (
     <>
       <div
-        onClick={() => setShowModal(true)} // ✅ open modal on click
+        onClick={() => setShowModal(true)} // ✅ open modal on card click
         className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-lg transition relative cursor-pointer"
       >
         {/* Wishlist Button */}
@@ -49,35 +45,34 @@ export default function ProductCard({ product }) {
           <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">
             {product.name}
           </h3>
+
           <p className="text-xs text-gray-500">{product.category}</p>
+          {/* Stock + Rating Row */}
+          <div className="flex items-center justify-between text-xs">
+            <p className="text-gray-500">Stock: {product.stock || "N/A"}</p>
+            <p className="text-yellow-500 font-medium">
+              ⭐ {product.rating ? product.rating.toFixed(1) : "0.0"}
+            </p>
+          </div>
         </div>
 
-        {/* Price + Cart Action */}
+        {/* Price + Buy Button */}
         <div className="mt-3 flex items-center justify-between">
-          {inCart ? (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removeFromCart(product._id);
-              }}
-              className="bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1 rounded-lg transition"
-            >
-              Remove
-            </button>
-          ) : (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(product);
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-3 py-1 rounded-lg transition"
-            >
-              Add to cart
-            </button>
-          )}
+          {/* Price on left */}
           <span className="text-green-600 font-semibold text-sm">
             ${product.price?.toFixed(2)}
           </span>
+
+          {/* Buy Now button on right */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowModal(true); // ✅ open modal via button
+            }}
+            className=" text-black border-green-500 border text-xs font-medium px-3 py-1 transition"
+          >
+            Buy Now
+          </button>
         </div>
       </div>
 
