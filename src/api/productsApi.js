@@ -8,9 +8,8 @@ const API = axios.create({
 // Create a new product (Admin only)
 export const createProduct = (data, token) =>
   API.post("/products/create", data, {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}` }, // REMOVE Content-Type
   });
-
 // Get all products
 export const getProducts = () => API.get("/products");
 // Get products by category
