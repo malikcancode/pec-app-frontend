@@ -25,6 +25,13 @@ import Help from "./pages/MenuPages/Help";
 import ProductDetails from "./components/Products/ProductDetails";
 import KycDetails from "./pages/MenuPages/KycDetails";
 import ChatSupport from "./pages/ChatSupport";
+import PendingDeposit from "./pages/Admin/PendingDeposit";
+import PendingWithdrawal from "./pages/Admin/PendingWithdrawal";
+import RechargeHistory from "./pages/Admin/RechargeHistory";
+import WithdrawHistory from "./pages/Admin/WithdrawHistory";
+import Bonus from "./pages/Admin/Bonus";
+import Logout from "./pages/Admin/Logout";
+import AdminMessages from "./pages/Admin/AdminMessages";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -73,6 +80,15 @@ function App() {
               <Route path="users" element={<Users />} />
               <Route path="orders" element={<Orders />} />
               <Route path="notifications" element={<Notifications />} />
+              <Route path="pending-deposit" element={<PendingDeposit />} />
+              <Route
+                path="pending-withdrawal"
+                element={<PendingWithdrawal />}
+              />
+              <Route path="recharge-history" element={<RechargeHistory />} />
+              <Route path="withdraw-history" element={<WithdrawHistory />} />
+              <Route path="bonus" element={<Bonus />} />
+              <Route path="admin-messages" element={<AdminMessages />} />
             </Route>
 
             {/* Dashboard Routes */}

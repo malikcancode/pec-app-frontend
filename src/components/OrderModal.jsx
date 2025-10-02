@@ -1,16 +1,28 @@
 // components/Orders/OrderModal.jsx
+import { useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import { useOrders } from "../context/OrderContext";
 
 export default function OrderModal({ product, onClose }) {
   const { placeOrder } = useOrders();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   if (!product) return null;
 
   const handleOrder = () => {
-    placeOrder(product);
-    toast.success("Order placed successfully!");
-    onClose();
+    setLoading(true);
+    toast.info("Processing your order, please wait...");
+
+    // simulate 8–10s delay
+    setTimeout(() => {
+      placeOrder(product);
+      toast.success("Order placed successfully!");
+      setLoading(false);
+      onClose();
+      navigate("/orders"); // ✅ navigate after placing
+    }, 9000); // 9 seconds
   };
 
   return (
@@ -20,6 +32,7 @@ export default function OrderModal({ product, onClose }) {
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 hover:bg-gray-100 p-2 rounded-full transition"
+          disabled={loading}
         >
           ✕
         </button>
@@ -83,9 +96,14 @@ export default function OrderModal({ product, onClose }) {
         {/* Action Button */}
         <button
           onClick={handleOrder}
-          className="w-full mt-6 bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium text-base transition shadow-md"
+          disabled={loading}
+          className={`w-full mt-6 ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          } text-white py-3 rounded-lg font-medium text-base transition shadow-md`}
         >
-          Process Order
+          {loading ? "Processing..." : "Process Order"}
         </button>
       </div>
     </div>
