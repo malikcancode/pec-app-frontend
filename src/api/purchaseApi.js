@@ -2,8 +2,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  // baseURL: "https://pec-app-backend.vercel.app/api",
-  baseURL: "http://localhost:5000/api", // Use local backend for dev
+  baseURL: "https://pec-app-backend.vercel.app/api",
+  // baseURL: "http://localhost:5000/api", // Use local backend for dev
 });
 // User buys a product
 export const buyProduct = (token, data) =>
