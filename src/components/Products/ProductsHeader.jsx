@@ -1,5 +1,5 @@
 import { useProducts } from "../../context/ProductsContext";
-import { FiFilter, FiStar, FiSquare, FiTag } from "react-icons/fi";
+import { FiFilter, FiStar, FiSquare, FiTag, FiSearch } from "react-icons/fi";
 
 const categories = [
   { name: "Gadgets", icon: "📦" },
@@ -11,7 +11,7 @@ const categories = [
   { name: "Electronics", icon: "🔌" },
   { name: "Home Decores", icon: "🏠" },
   { name: "Women's fashion", icon: "👗" },
-  { name: "Hoodies & shirts", icon: "🧥" },
+  { name: "Hoodies & shirts", icon: "🧥" },
 ];
 
 // put longer ones last
@@ -32,19 +32,25 @@ export default function ProductsHeader() {
 
   return (
     <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm">
-      {/* Search + Dropdown */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search products..."
-          className="px-4 py-2 border rounded-lg flex-1 w-full sm:w-auto"
-        />
+      {/* Search + Dropdown in flex */}
+      <div className="flex gap-3 mb-4">
+        {/* Search input with icon */}
+        <div className="relative flex-1">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search products..."
+            className="pl-10 pr-4 py-2 border rounded-lg w-full"
+          />
+        </div>
+
+        {/* Category dropdown */}
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2 border rounded-lg w-full sm:w-40"
+          className="px-4 py-2 border rounded-lg w-32 text-xs sm:w-40 md:w-48"
         >
           <option value="">All Categories</option>
           {sortedCategories.map((cat) => (
@@ -60,30 +66,30 @@ export default function ProductsHeader() {
         {filters.map((f, i) => (
           <button
             key={i}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 bg-gray-50 hover:bg-blue-50 border rounded-3xl border-gray-100 hover:text-blue-600 transition whitespace-nowrap"
+            className="flex items-center gap-2 px-2 py-2 text-sm text-gray-600 bg-gray-50 hover:bg-blue-50 border rounded-3xl border-gray-100 hover:text-blue-600 transition whitespace-nowrap"
           >
             {f.icon} {f.name}
           </button>
         ))}
       </div>
 
-      {/* Category Icons */}
-      <div className="grid grid-cols-3 xs:grid-cols-4 sm:flex sm:flex-wrap sm:justify-start gap-3">
+      {/* Category Icons Grid (5x5 on small screens) */}
+      <div className="grid grid-cols-5 gap-2 sm:flex sm:flex-wrap sm:justify-start">
         {sortedCategories.map((cat) => {
           const isActive = selectedCategory === cat.name;
           return (
             <button
               key={cat.name}
               onClick={() => setSelectedCategory(isActive ? "" : cat.name)}
-              className={`flex flex-col items-center justify-center w-full sm:w-20 p-2 text-center transition 
-          ${
-            isActive
-              ? "bg-green-500 text-white rounded-2xl"
-              : "bg-gray-50 hover:bg-gray-100 text-gray-600 border rounded-2xl border-gray-300"
-          }`}
+              className={`flex flex-col items-center justify-center p-[3px] text-center transition rounded-xl 
+              ${
+                isActive
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-300"
+              }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">{cat.icon}</span>
-              <span className="text-[10px] text-wrap sm:text-xs truncate px-1">
+              <span className="text-lg sm:text-xl">{cat.icon}</span>
+              <span className="text-[10px] sm:text-[9px] truncate w-full">
                 {cat.name}
               </span>
             </button>

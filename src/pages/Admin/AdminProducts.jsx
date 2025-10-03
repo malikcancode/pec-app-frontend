@@ -91,7 +91,7 @@ function AdminProducts() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col px-4 sm:px-8 py-4 sm:py-6">
+    <div className="h-full flex flex-col px-4 sm:px-8 py-4 sm:py-6">
       <div className="max-w-full mx-auto w-full">
         <div className="flex flex-col sm:flex-row justify-end items-end mb-8 space-y-4 sm:space-y-0">
           <button

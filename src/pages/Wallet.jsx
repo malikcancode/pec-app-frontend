@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaMoneyBillWave, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { PiHandDepositFill } from "react-icons/pi";
@@ -9,6 +9,8 @@ import Header from "../components/Header";
 import BottomNavigation from "../components/BottomNavigation";
 import PaymentConfirmationModal from "../pages/PaymentConfirmation";
 import PaymentQRCode from "./PaymentQRCode";
+import { AuthContext } from "../context/AuthContext";
+import { getMyTransactions } from "../api/paymentApi";
 
 export default function Wallet() {
   const navigate = useNavigate();
@@ -19,31 +21,28 @@ export default function Wallet() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [depositAmount, setDepositAmount] = useState("");
   const [currentOrderNumber, setCurrentOrderNumber] = useState("");
+  const { token } = useContext(AuthContext);
+  const [userBalance, setUserBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]); // <--
 
-  // Sample transaction data
-  const transactions = [
-    {
-      id: 1,
-      status: "Valid",
-      operationAmount: -9.89,
-      latestAmount: 0.65,
-      type: "Clear condition",
-    },
-    {
-      id: 2,
-      status: "Frozen",
-      operationAmount: 19.99,
-      latestAmount: 1,
-      type: "Deposit",
-    },
-    {
-      id: 3,
-      status: "Valid",
-      operationAmount: 50.0,
-      latestAmount: 51.0,
-      type: "Deposit",
-    },
-  ];
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const res = await getMyTransactions(token);
+
+        if (res.data.user && typeof res.data.user.balance === "number") {
+          setUserBalance(res.data.user.balance);
+        }
+
+        if (Array.isArray(res.data.transactions)) {
+          setTransactions(res.data.transactions); // <-- set real txns
+        }
+      } catch (err) {
+        console.error("Failed to fetch transactions", err);
+      }
+    };
+    fetchBalance();
+  }, [token, showPaymentModal, showDepositModal]);
 
   const handleDeposit = () => {
     if (!depositAmount || Number(depositAmount) <= 0) {
@@ -106,11 +105,11 @@ export default function Wallet() {
           </h2>
           <div className="grid grid-cols-2 gap-6 mb-6 text-white">
             <div>
-              <div className="text-3xl font-bold">0.65</div>
+              <div className="text-3xl font-bold">${userBalance}</div>
               <div className="text-sm">Available Amount</div>
             </div>
             <div>
-              <div className="text-3xl font-bold">104.35</div>
+              <div className="text-3xl font-bold">$104.35</div>
               <div className="text-sm">In transaction</div>
             </div>
           </div>
@@ -153,48 +152,68 @@ export default function Wallet() {
             ))}
           </div>
 
-          {/* Transaction Table */}
           <div className="p-4 flex flex-col space-y-6">
-            {transactions.map((transaction) => (
-              <div
-                key={transaction.id}
-                className="bg-white rounded-lg shadow-md border-l-4 border-green-500 p-4"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                    <span className="text-sm text-gray-600">
-                      {transaction.type}
-                    </span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">
-                    More →
-                  </span>
-                </div>
-                <div className="ml-0 md:ml-4">
-                  <div className="text-lg font-bold text-gray-900 mb-1">
-                    {transaction.status}
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-600 mb-1">
-                    <span>Operation amount</span>
-                    <span
-                      className={
-                        transaction.operationAmount < 0
-                          ? "text-red-500"
-                          : "text-green-500"
-                      }
-                    >
-                      {transaction.operationAmount > 0 ? "+" : ""}
-                      {transaction.operationAmount}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm text-gray-600">
-                    <span>Latest amount</span>
-                    <span>{transaction.latestAmount}</span>
-                  </div>
-                </div>
+            {activeTab === "account" && (
+              <div className="text-center text-gray-500">
+                Account details coming soon
               </div>
-            ))}
+            )}
+
+            {activeTab === "deposit" && (
+              <>
+                {transactions.length === 0 ? (
+                  <div className="text-center text-gray-500">
+                    No deposit records yet
+                  </div>
+                ) : (
+                  transactions.map((txn) => (
+                    <div
+                      key={txn._id}
+                      className="bg-white rounded-lg shadow-md border-l-4 border-green-500 p-4"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                          <span className="text-sm text-gray-600">
+                            {txn.type}
+                          </span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900">
+                          {new Date(txn.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+
+                      <div className="ml-0 md:ml-4">
+                        <div className="text-lg font-bold text-gray-900 mb-1">
+                          {txn.status}
+                        </div>
+                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                          <span>Operation amount</span>
+                          <span
+                            className={
+                              txn.amount < 0 ? "text-red-500" : "text-green-500"
+                            }
+                          >
+                            {txn.amount > 0 ? "+" : ""}
+                            {txn.amount}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm text-gray-600">
+                          <span>Method</span>
+                          <span>{txn.method}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </>
+            )}
+
+            {activeTab === "withdrawal" && (
+              <div className="text-center text-gray-500">
+                Withdrawal records coming soon
+              </div>
+            )}
           </div>
         </div>
       </main>

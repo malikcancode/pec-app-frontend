@@ -59,7 +59,7 @@ export default function ProductCard({ product }) {
         {/* Price + Buy Button */}
         <div className="mt-3 flex items-center justify-between">
           {/* Price on left */}
-          <span className="text-green-600 font-semibold text-sm">
+          <span className="text-green-600 font-semibold text-xs">
             ${product.price?.toFixed(2)}
           </span>
 

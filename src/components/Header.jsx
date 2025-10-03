@@ -101,15 +101,14 @@ export default function Header() {
 
           {/* Hamburger Menu */}
           <button
-            className="md:hidden w-8 h-8 bg-gray-800 rounded flex items-center justify-center"
+            className="w-8 h-8 bg-gray-800 rounded flex items-center justify-center"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <FaBars className="text-white text-lg" />
           </button>
         </div>
       </div>
-
-      {/* Mobile Dropdown */}
+      {/* Mobile + Desktop Dropdown (works everywhere now) */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -117,7 +116,7 @@ export default function Header() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 100, damping: 20 }}
-            className="fixed top-0 right-0 h-full w-4/5 bg-white shadow-lg z-50 md:hidden flex flex-col"
+            className="fixed top-0 right-0 h-full w-4/5 max-w-sm bg-white shadow-lg z-50 flex flex-col"
           >
             {/* Header with Profile */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-green-50">
@@ -144,7 +143,6 @@ export default function Header() {
                   </p>
                 </div>
               </div>
-
               <button
                 className="text-gray-600 text-2xl"
                 onClick={() => setMenuOpen(false)}

@@ -1,5 +1,5 @@
 function PendingWithdrawal() {
-  return <div className="w-full h-screen bg-red-600"></div>;
+  return <div className="w-full"></div>;
 }
 
 export default PendingWithdrawal;

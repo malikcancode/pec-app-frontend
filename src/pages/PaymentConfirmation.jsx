@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaTimes, FaCheckCircle } from "react-icons/fa";
 import { SiTether, SiVisa, SiMastercard } from "react-icons/si";
 import { useNavigate } from "react-router-dom"; // ✅ for navigation
+import { AuthContext } from "../context/AuthContext";
+import { depositRequest } from "../api/paymentApi";
 
 export default function PaymentConfirmationModal({
   isOpen,
@@ -15,6 +17,7 @@ export default function PaymentConfirmationModal({
   const [activeTab, setActiveTab] = useState("online");
   const [selectedPayment, setSelectedPayment] = useState(null);
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
 
   if (!isOpen) return null;
 
@@ -47,6 +50,24 @@ export default function PaymentConfirmationModal({
     { id: 5, name: "UPI", img: "/upi.jpg" },
   ];
 
+  const handleOfflineDeposit = async (opt) => {
+    try {
+      // Prepare deposit data
+      const depositData = {
+        amount: Number(amount),
+        method: opt.name,
+        screenshot: null, // Optional, can add later
+      };
+      // Call API to create pending deposit
+      await depositRequest(token, depositData);
+      // Navigate to chat-support page
+      navigate("/chat-support", {
+        state: { method: opt.name, amount },
+      });
+    } catch (error) {
+      alert("Failed to create deposit request. Please try again.");
+    }
+  };
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
@@ -167,19 +188,15 @@ export default function PaymentConfirmationModal({
                 {offlineOptions.map((opt) => (
                   <div
                     key={opt.id}
-                    className="bg-green-500 hover:bg-green-600 transition-colors p-3 flex flex-col items-center justify-center rounded-lg cursor-pointer"
-                    onClick={() =>
-                      navigate("/chat-support", {
-                        state: { method: opt.name, amount },
-                      })
-                    }
+                    className="border border-green-500  p-3 flex flex-col items-center justify-center rounded-lg cursor-pointer"
+                    onClick={() => handleOfflineDeposit(opt)} // <-- Call handler
                   >
                     <img
                       src={opt.img}
                       alt={opt.name}
                       className="w-12 h-12 object-contain mb-2"
                     />
-                    <p className="text-xs font-medium text-white text-center">
+                    <p className="text-xs font-normal text-green-500 text-center">
                       {opt.name}
                     </p>
                   </div>

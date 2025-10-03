@@ -45,7 +45,7 @@ function AdminSidebar({ closeSidebar, setActiveLink, activeLink }) {
                 <Link
                   to={item.path}
                   onClick={() => handleLinkClick(item.name)}
-                  className="block w-full p-2 text-white"
+                  className="block w-full p-2 capitalize text-white"
                 >
                   {item.name}
                 </Link>

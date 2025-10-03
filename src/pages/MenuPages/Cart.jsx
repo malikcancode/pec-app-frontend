@@ -62,9 +62,9 @@ export default function Cart() {
 
                   {/* Actions */}
                   <div className="flex items-center justify-between mt-4">
-                    <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                    {/* <button className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
                       Checkout
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => removeFromCart(item.id)}
                       className="text-red-500 hover:text-red-600"
