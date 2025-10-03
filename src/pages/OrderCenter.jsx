@@ -72,7 +72,7 @@ export default function OrderCenter() {
       {/* Header with Estimate Profit */}
       <div className="mb-6">
         <h1 className="text-lg font-semibold text-gray-900">
-          Estimate Profit: {purchases.length > 0 ? "24.68" : "0.00"}
+          {/* Estimate Profit: {purchases.length > 0 ? "24.68" : "0.00"} */}
         </h1>
       </div>
 
