@@ -1,32 +1,38 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../../api/productsApi"; // <-- API call
+import { getMyPurchases } from "../../api/purchaseApi";
 import { FaBox, FaCreditCard, FaPlane, FaCheckCircle } from "react-icons/fa";
 
 export default function ProductDetails() {
-  const { id } = useParams(); // route param
-  const [product, setProduct] = useState(null);
+  const { id } = useParams();
+  const [purchase, setPurchase] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchPurchase = async () => {
+      setLoading(true);
       try {
-        const res = await getProductById(id);
-        setProduct(res.data);
+        const token = localStorage.getItem("token");
+        const res = await getMyPurchases(token);
+        // Find the purchase for this product
+        const found = res.data.purchases.find((p) => p.product?._id === id);
+        setPurchase(found || null);
       } catch (err) {
-        console.error("Error fetching product:", err);
-        setError("Failed to load product details");
+        setError("Failed to load order details");
       } finally {
         setLoading(false);
       }
     };
-    fetchProduct();
+    fetchPurchase();
   }, [id]);
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
-  if (!product) return <p className="text-center mt-10">Product not found.</p>;
+  if (!purchase || !purchase.product)
+    return <p className="text-center mt-10">Order not found.</p>;
+
+  const { product, createdAt, paymentClaimedAt, amount } = purchase;
 
   return (
     <div className="p-6 min-h-screen w-full">
@@ -38,9 +44,9 @@ export default function ProductDetails() {
               <FaBox size={14} />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-700">Place Order</p>
+              <p className="text-sm font-medium text-gray-700">Order Placed</p>
               <p className="text-xs text-gray-500">
-                {new Date(product.createdAt).toLocaleString()}
+                {createdAt ? new Date(createdAt).toLocaleString() : "N/A"}
               </p>
             </div>
           </div>
@@ -52,7 +58,9 @@ export default function ProductDetails() {
             <div>
               <p className="text-sm font-medium text-gray-700">Payment</p>
               <p className="text-xs text-gray-500">
-                {new Date(product.updatedAt).toLocaleString()}
+                {paymentClaimedAt
+                  ? new Date(paymentClaimedAt).toLocaleString()
+                  : "Pending"}
               </p>
             </div>
           </div>
@@ -85,7 +93,7 @@ export default function ProductDetails() {
 
         {/* --- Product Section --- */}
         <div>
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">Products</h2>
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">Product</h2>
           <div className="flex items-center gap-4">
             <img
               src={
@@ -99,11 +107,9 @@ export default function ProductDetails() {
               <h3 className="text-sm font-semibold text-gray-900">
                 {product.name}
               </h3>
-              <p className="text-xs text-gray-500 line-through">
-                ${(product.price + 3).toFixed(2)}
-              </p>
+              <p className="text-xs text-gray-500">{product.category}</p>
               <p className="text-green-600 font-semibold">
-                ${product.price.toFixed(2)} × 1
+                ${product.price?.toFixed(2)} × 1
               </p>
             </div>
           </div>
@@ -111,12 +117,12 @@ export default function ProductDetails() {
           <div className="mt-4 space-y-1 text-sm text-gray-700">
             <p className="flex justify-between">
               <span>Total order price</span>
-              <span>${product.price.toFixed(2)}</span>
+              <span>${product.price?.toFixed(2)}</span>
             </p>
             <p className="flex justify-between">
               <span>Payment amount</span>
               <span className="text-green-600">
-                ${(product.price - 3).toFixed(2)}
+                ${amount?.toFixed(2) || product.price?.toFixed(2)}
               </span>
             </p>
           </div>

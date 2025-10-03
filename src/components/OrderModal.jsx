@@ -1,29 +1,44 @@
-// components/Orders/OrderModal.jsx
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useOrders } from "../context/OrderContext";
+import { buyProduct } from "../api/purchaseApi";
 
 export default function OrderModal({ product, onClose }) {
-  const { placeOrder } = useOrders();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState(null);
+
+  const token = localStorage.getItem("token");
 
   if (!product) return null;
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     setLoading(true);
     toast.info("Processing your order, please wait...");
 
-    // simulate 8–10s delay
-    setTimeout(() => {
-      placeOrder(product);
+    try {
+      // Call backend API to buy product
+      const res = await buyProduct(token, { productId: product._id });
+      setOrder(res.data.purchase); // Store backend order data
       toast.success("Order placed successfully!");
       setLoading(false);
-      onClose();
-      navigate("/orders"); // ✅ navigate after placing
-    }, 9000); // 9 seconds
+      // Optionally: close modal after showing order summary
+      setTimeout(() => {
+        onClose();
+        navigate("/orders");
+      }, 1500);
+    } catch (err) {
+      setLoading(false);
+      if (err.response?.data?.message) {
+        toast.error(err.response.data.message); // e.g., "Insufficient balance"
+      } else {
+        toast.error("Order failed. Please try again.");
+      }
+    }
   };
+
+  // Use backend order ID if available, else show last 6 of product._id
+  const orderId = order?._id ? order._id : product._id?.slice(-6);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
@@ -39,8 +54,7 @@ export default function OrderModal({ product, onClose }) {
 
         {/* Header */}
         <h2 className="text-xl font-semibold text-gray-800 mb-5">
-          Order Summary{" "}
-          <span className="text-gray-400">#{product._id.slice(-6)}</span>
+          Order Summary
         </h2>
 
         {/* Product Info */}
@@ -90,21 +104,27 @@ export default function OrderModal({ product, onClose }) {
         {/* Total */}
         <div className="flex justify-between mt-5 text-lg font-bold text-gray-900 border-t pt-4">
           <span>Total Payable</span>
-          <span>${(product.price + 5).toFixed(2)}</span>
+          <span>${product.price?.toFixed(2)}</span>
         </div>
 
         {/* Action Button */}
-        <button
-          onClick={handleOrder}
-          disabled={loading}
-          className={`w-full mt-6 ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
-          } text-white py-3 rounded-lg font-medium text-base transition shadow-md`}
-        >
-          {loading ? "Processing..." : "Process Order"}
-        </button>
+        {!order ? (
+          <button
+            onClick={handleOrder}
+            disabled={loading}
+            className={`w-full mt-6 ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700"
+            } text-white py-3 rounded-lg font-medium text-base transition shadow-md`}
+          >
+            {loading ? "Processing..." : "Process Order"}
+          </button>
+        ) : (
+          <div className="w-full mt-6 bg-green-100 text-green-800 py-3 rounded-lg font-medium text-base text-center shadow-md">
+            Order placed! Redirecting...
+          </div>
+        )}
       </div>
     </div>
   );

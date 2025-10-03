@@ -60,7 +60,7 @@ export default function ProductCard({ product }) {
         <div className="mt-3 flex items-center justify-between">
           {/* Price on left */}
           <span className="text-green-600 font-semibold text-xs">
-            ${product.price?.toFixed(2)}
+            ${product.price?.toFixed(0)}
           </span>
 
           {/* Buy Now button on right */}
@@ -69,7 +69,7 @@ export default function ProductCard({ product }) {
               e.stopPropagation();
               setShowModal(true); // ✅ open modal via button
             }}
-            className=" text-black border-green-500 border text-xs font-medium px-3 py-1 transition"
+            className=" text-black border-green-500 border text-[8px] font-medium px-[8px] py-1 transition"
           >
             Buy Now
           </button>

@@ -50,7 +50,7 @@ export default function ProductsHeader() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2 border rounded-lg w-32 text-xs sm:w-40 md:w-48"
+          className="px-4 py-2 border rounded-lg w-20 text-xs sm:w-40 md:w-48"
         >
           <option value="">All Categories</option>
           {sortedCategories.map((cat) => (

@@ -47,7 +47,7 @@ export default function PaymentConfirmationModal({
       img: "/bkash.webp",
     },
     { id: 5, name: "Nagad", img: "/nagad.png" },
-    { id: 5, name: "UPI", img: "/upi.jpg" },
+    { id: 6, name: "UPI", img: "/upi.jpg" },
   ];
 
   const handleOfflineDeposit = async (opt) => {

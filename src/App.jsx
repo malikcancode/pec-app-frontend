@@ -30,7 +30,6 @@ import PendingWithdrawal from "./pages/Admin/PendingWithdrawal";
 import RechargeHistory from "./pages/Admin/RechargeHistory";
 import WithdrawHistory from "./pages/Admin/WithdrawHistory";
 import Bonus from "./pages/Admin/Bonus";
-import Logout from "./pages/Admin/Logout";
 import AdminMessages from "./pages/Admin/AdminMessages";
 
 // Lazy load components
@@ -42,7 +41,6 @@ const Wallet = lazy(() => import("./pages/Wallet"));
 const OrderCenter = lazy(() => import("./pages/OrderCenter"));
 const Withdraw = lazy(() => import("./pages/Withdraw"));
 const PaymentConfirmation = lazy(() => import("./pages/PaymentConfirmation"));
-const OrderDetails = lazy(() => import("./pages/OrderDetails"));
 const About = lazy(() => import("./pages/About"));
 const FAQs = lazy(() => import("./pages/FAQs"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -295,17 +293,6 @@ function App() {
                 <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <ChatSupport />
-                  </DashboardLayout>
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/orders/:orderId"
-              element={
-                <ProtectedRoute allowedRoles={["user"]}>
-                  <DashboardLayout>
-                    <OrderDetails />
                   </DashboardLayout>
                 </ProtectedRoute>
               }

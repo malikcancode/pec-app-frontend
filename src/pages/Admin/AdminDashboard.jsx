@@ -12,13 +12,6 @@ function AdminDashboard() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
 
-  // Log the user data to the console when user data is available
-  useEffect(() => {
-    if (!loading) {
-      console.log("Admin User Data:", user); // Log user data
-    }
-  }, [loading, user]);
-
   // Fetch total products and total users when the component mounts
   useEffect(() => {
     const fetchData = async () => {
