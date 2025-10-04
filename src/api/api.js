@@ -90,6 +90,11 @@ export const createKYC = (token, data) => {
   });
 };
 
+export const getMyKYC = (token) =>
+  API.get("/kyc/my-kyc", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
 // Get all KYC records
 export const getAllKYC = (token) =>
   API.get("/kyc", {
@@ -135,3 +140,27 @@ export const deleteKYC = (token, id) =>
   API.delete(`/kyc/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+/* ---------------------- Settings APIs ---------------------- */
+
+// Get current user settings
+export const getSettings = (token) =>
+  API.get("/settings", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+// Update user settings
+export const updateSettings = (token, data) =>
+  API.put("/settings", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+// Approve or Reject a KYC (admin only)
+export const verifyOrRejectKYC = (token, id, status) =>
+  API.put(
+    `/admin/verify/${id}`, // ✅ Correct endpoint
+    { status },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );

@@ -9,6 +9,7 @@ import {
   FiCheckCircle,
   FiTrendingUp,
 } from "react-icons/fi";
+import Footer from "./Footer";
 
 function Home() {
   const navigate = useNavigate();
@@ -171,13 +172,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="p-6 bg-green-100 text-center text-gray-700">
-        <p>
-          Discover why millions of entrepreneurs choose PSC to build their
-          business — from hello world to IPO.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,52 +1,65 @@
 import { createContext, useState, useEffect } from "react";
-import { getProfile, getAdminProfile } from "../api/api"; // import admin profile
+import { getProfile, getAdminProfile } from "../api/api";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const storedRole = localStorage.getItem("role") || "user";
+  const storedToken =
+    storedRole === "admin"
+      ? localStorage.getItem("adminToken")
+      : localStorage.getItem("userToken");
+
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [role, setRole] = useState(localStorage.getItem("role") || "user"); // track role
+  const [token, setToken] = useState(storedToken || "");
+  const [role, setRole] = useState(storedRole);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (token) {
-      const fetchProfile = async () => {
-        try {
-          let res;
-          if (role === "admin") {
-            res = await getAdminProfile(token);
-          } else {
-            res = await getProfile(token);
-          }
-          setUser(res.data);
-        } catch {
-          setToken("");
-          setUser(null);
-          localStorage.removeItem("token");
-          localStorage.removeItem("role");
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProfile();
-    } else {
+    if (!token) {
       setLoading(false);
+      return;
     }
+
+    const fetchProfile = async () => {
+      try {
+        let res;
+        if (role === "admin") {
+          res = await getAdminProfile(token);
+        } else {
+          res = await getProfile(token);
+        }
+        setUser(res.data);
+      } catch {
+        logout();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
   }, [token, role]);
 
   const login = (token, role = "user") => {
     setToken(token);
     setRole(role);
-    localStorage.setItem("token", token);
+
+    if (role === "admin") {
+      localStorage.setItem("adminToken", token);
+    } else {
+      localStorage.setItem("userToken", token);
+    }
+
     localStorage.setItem("role", role);
   };
 
   const logout = () => {
-    setToken("");
     setUser(null);
+    setToken("");
     setRole("user");
-    localStorage.removeItem("token");
+
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("userToken");
     localStorage.removeItem("role");
   };
 

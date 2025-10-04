@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaChevronLeft,
@@ -11,12 +11,14 @@ import {
 import { getMyPurchases } from "../api/purchaseApi";
 import { claimProfit } from "../api/purchaseApi";
 import { toast } from "react-toastify";
+import { AuthContext } from "../context/AuthContext";
 
 export default function OrderCenter() {
   const [currentPage, setCurrentPage] = useState(1);
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
 
   const totalPages = 5;
 
@@ -24,7 +26,6 @@ export default function OrderCenter() {
     const fetchPurchases = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
         const res = await getMyPurchases(token);
         setPurchases(res.data.purchases || []);
       } catch (err) {
@@ -44,7 +45,6 @@ export default function OrderCenter() {
 
   const handleClaimProfit = async (purchaseId) => {
     try {
-      const token = localStorage.getItem("token");
       const res = await claimProfit(token, purchaseId);
       toast.success(res.data.message || "Profit claimed!");
       // Refresh purchases list to update status

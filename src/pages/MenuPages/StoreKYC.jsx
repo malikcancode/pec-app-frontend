@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { FaCheckCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import { createKYC, getAllKYC } from "../../api/api";
+import React, { useState, useEffect, useContext } from "react";
+import { FaCheckCircle, FaIdCard } from "react-icons/fa";
+import { createKYC, getMyKYC } from "../../api/api";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function StoreKYC() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [pending, setPending] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [kycDetails, setKycDetails] = useState(null);
+  const [loadingKYC, setLoadingKYC] = useState(true); // new loading flag
+  const { token } = useContext(AuthContext); // This ensures correct token is used
 
   const [form, setForm] = useState({
     name: "",
@@ -20,28 +23,59 @@ export default function StoreKYC() {
     idBack: null,
   });
 
-  // ✅ Check if user already has a pending KYC
   useEffect(() => {
-    const checkKYC = async () => {
-      const token = localStorage.getItem("token");
-      const userEmail = localStorage.getItem("userEmail"); // store at login
-      if (!token || !userEmail) return;
+    const fetchKYC = async () => {
+      if (!token) {
+        setLoadingKYC(false);
+        return;
+      }
 
       try {
-        const res = await getAllKYC(token);
-        const myKYC = res.data.find((k) => k.email === userEmail);
+        const res = await getMyKYC(token);
+        const myKYC = res.data;
 
-        if (myKYC && myKYC.status === "pending") {
-          setPending(true);
+        if (!myKYC) {
+          setPending(false);
+          setVerified(false);
+        } else {
+          setKycDetails(myKYC);
+
+          switch (myKYC.status) {
+            case "pending":
+              setPending(true);
+              setVerified(false);
+              break;
+            case "approved":
+              setPending(false);
+              setVerified(true);
+              break;
+            case "rejected":
+              setPending(false);
+              setVerified(false);
+              toast.error(
+                `❌ Your KYC was rejected. Reason: ${
+                  myKYC.rejectionReason || "Not provided"
+                }`
+              );
+              break;
+            default:
+              setPending(false);
+              setVerified(false);
+          }
         }
       } catch (err) {
-        console.error("Error checking KYC:", err);
+        console.error("Error fetching KYC:", err);
+        setPending(false);
+        setVerified(false);
+      } finally {
+        setLoadingKYC(false);
       }
     };
-    checkKYC();
+
+    fetchKYC();
   }, []);
 
-  // ✅ Handle input
+  // ✅ Handle form field changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setForm((prev) => ({
@@ -50,15 +84,11 @@ export default function StoreKYC() {
     }));
   };
 
-  // ✅ Submit KYC
+  // ✅ Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (pending) {
-      toast.warning("⚠️ Your KYC is already pending review.");
-      return;
-    }
+    if (pending || verified) return;
 
-    // Validation
     if (
       !form.name ||
       !form.address ||
@@ -69,23 +99,32 @@ export default function StoreKYC() {
       !form.idFront ||
       !form.idBack
     ) {
-      toast.warning("⚠️ Please fill in all fields before submitting.");
+      toast.warn("⚠️ Please fill in all fields.");
       return;
     }
 
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
-      const response = await createKYC(token, form);
+      await createKYC(token, form);
       toast.success("✅ KYC submitted successfully!");
-      navigate("/kyc-details", { state: { kyc: response.data } });
+      setPending(true);
     } catch (error) {
       console.error("Error submitting KYC:", error);
-      toast.error("❌ Failed to submit KYC. Try again.");
+      const msg = error.response?.data?.error || "Failed to submit KYC.";
+      toast.error(`❌ ${msg}`);
     } finally {
       setLoading(false);
     }
   };
+
+  if (loadingKYC) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <p className="text-gray-500">Loading KYC status...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 h-full bg-gray-50">
@@ -93,15 +132,75 @@ export default function StoreKYC() {
         <FaCheckCircle className="text-green-500" /> Store KYC Verification
       </h1>
 
-      <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100 max-w-lg mx-auto">
-        {pending ? (
-          <p className="text-red-600 font-semibold text-center">
-            ⚠️ Your KYC is currently <span className="font-bold">pending</span>{" "}
-            review. You cannot submit again until it’s approved or rejected.
+      {/* ⏳ If Pending */}
+      {pending && !verified && (
+        <div className="bg-white border border-yellow-200 rounded-lg shadow-md p-6 text-center">
+          <p className="text-yellow-600 font-semibold text-lg">
+            ⏳ Your KYC is under review.
           </p>
-        ) : (
+          <p className="text-gray-500 mt-2">
+            Please wait while our team verifies your submitted details.
+          </p>
+        </div>
+      )}
+
+      {/* ✅ If Verified */}
+      {verified && kycDetails && (
+        <div className="bg-white shadow-md rounded-lg border border-gray-100 p-6 max-w-2xl mx-auto">
+          <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-6">
+            <FaIdCard className="text-green-500" /> Verified KYC Information
+          </h2>
+
+          <div className="divide-y divide-gray-200">
+            {[
+              ["Full Name", kycDetails.name],
+              ["Address", kycDetails.address],
+              ["Phone", kycDetails.phone],
+              ["Email", kycDetails.email],
+              ["ID Type", kycDetails.idType],
+              ["ID Number", kycDetails.idNumber],
+              [
+                "Status",
+                <span className="text-green-600 font-semibold">
+                  Verified ✅
+                </span>,
+              ],
+            ].map(([label, value], i) => (
+              <div key={i} className="flex justify-between py-3">
+                <span className="text-gray-600 font-medium">{label}</span>
+                <span className="text-gray-800 truncate max-w-xs text-right">
+                  {value}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-gray-600 font-medium mb-1">ID Front</p>
+              <img
+                src={kycDetails.idFront}
+                alt="ID Front"
+                className="rounded-lg border border-gray-200 shadow-sm"
+              />
+            </div>
+            <div>
+              <p className="text-gray-600 font-medium mb-1">ID Back</p>
+              <img
+                src={kycDetails.idBack}
+                alt="ID Back"
+                className="rounded-lg border border-gray-200 shadow-sm"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🧾 If No KYC Yet */}
+      {!pending && !verified && (
+        <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100 max-w-lg mx-auto">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
+            {/* Full Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Full Name
@@ -194,7 +293,7 @@ export default function StoreKYC() {
               />
             </div>
 
-            {/* Upload Front */}
+            {/* Uploads */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload ID (Front Side)
@@ -208,7 +307,6 @@ export default function StoreKYC() {
               />
             </div>
 
-            {/* Upload Back */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Upload ID (Back Side)
@@ -222,17 +320,16 @@ export default function StoreKYC() {
               />
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-green-600 transition disabled:opacity-50"
+              className="w-full bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
             >
               {loading ? "Submitting..." : "Submit KYC"}
             </button>
           </form>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

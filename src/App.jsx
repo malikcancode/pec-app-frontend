@@ -31,6 +31,7 @@ import RechargeHistory from "./pages/Admin/RechargeHistory";
 import WithdrawHistory from "./pages/Admin/WithdrawHistory";
 import Bonus from "./pages/Admin/Bonus";
 import AdminMessages from "./pages/Admin/AdminMessages";
+import AdminKYC from "./pages/Admin/AdminKYC";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -83,6 +84,8 @@ function App() {
                 path="pending-withdrawal"
                 element={<PendingWithdrawal />}
               />
+              <Route path="/admin/kyc" element={<AdminKYC />} />
+
               <Route path="recharge-history" element={<RechargeHistory />} />
               <Route path="withdraw-history" element={<WithdrawHistory />} />
               <Route path="bonus" element={<Bonus />} />

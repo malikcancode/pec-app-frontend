@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { buyProduct } from "../api/purchaseApi";
+import { AuthContext } from "../context/AuthContext";
 
 export default function OrderModal({ product, onClose }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState(null);
-
-  const token = localStorage.getItem("token");
+  const { token } = useContext(AuthContext);
 
   if (!product) return null;
 

@@ -7,12 +7,12 @@ function Footer() {
         {/* Top Section */}
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-green-500">
-            partnersellercenter.shop
+            partnersellercentre
           </h2>
         </div>
 
         {/* Links Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-start sm:text-left">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-start sm:text-left">
           {/* Services */}
           <div>
             <h3 className="font-semibold text-gray-800 mb-3">Services</h3>

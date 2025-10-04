@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMyPurchases } from "../../api/purchaseApi";
 import { FaBox, FaCreditCard, FaPlane, FaCheckCircle } from "react-icons/fa";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [purchase, setPurchase] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchPurchase = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
         const res = await getMyPurchases(token);
         // Find the purchase for this product
         const found = res.data.purchases.find((p) => p.product?._id === id);
