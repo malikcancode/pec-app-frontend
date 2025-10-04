@@ -105,7 +105,6 @@ export default function StoreKYC() {
 
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
       await createKYC(token, form);
       toast.success("✅ KYC submitted successfully!");
       setPending(true);
