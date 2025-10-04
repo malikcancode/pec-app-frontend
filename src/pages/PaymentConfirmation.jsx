@@ -129,11 +129,13 @@ export default function PaymentConfirmationModal({
                 Payment options
               </h3>
 
-              {/* Tether Option */}
+              {/* Tether TRC20 Option */}
               <div
-                onClick={() => setSelectedPayment("tether")}
+                onClick={() => setSelectedPayment("tether-trc20")}
                 className={`relative bg-green-500 p-4 mb-3 cursor-pointer transition-all ${
-                  selectedPayment === "tether" ? "ring-2 ring-green-600" : ""
+                  selectedPayment === "tether-trc20"
+                    ? "ring-2 ring-green-600"
+                    : ""
                 }`}
               >
                 <div className="flex items-center justify-between text-white">
@@ -141,9 +143,42 @@ export default function PaymentConfirmationModal({
                     <div className="font-semibold text-lg">Tether</div>
                     <div className="text-sm opacity-90">USDT (TRC20)</div>
                   </div>
-                  <SiTether size={32} className="text-white" />
+                  <img
+                    src="/tether-usdt-logo.png" // Existing logo
+                    alt="USDT TRC20"
+                    className="w-8 h-8"
+                  />
                 </div>
-                {selectedPayment === "tether" && (
+                {selectedPayment === "tether-trc20" && (
+                  <div className="absolute top-2 right-2">
+                    <FaCheckCircle className="text-white" size={20} />
+                  </div>
+                )}
+              </div>
+
+              {/* Tether BEP20 Option */}
+              <div
+                onClick={() => setSelectedPayment("tether-bep20")}
+                className={`relative bg-green-500 p-4 mb-3 cursor-pointer transition-all ${
+                  selectedPayment === "tether-bep20"
+                    ? "ring-2 ring-green-600"
+                    : ""
+                }`}
+              >
+                <div className="flex items-center justify-between text-white">
+                  <div>
+                    <div className="font-semibold text-lg">Tether</div>
+                    <div className="text-sm opacity-90">USDT (BEP20)</div>
+                  </div>
+                  <div className="w-8 h-8 border-2 border-white rounded flex items-center justify-center text-white text-xs">
+                    <img
+                      src="/bdep.webp" // Existing logo
+                      alt="USDT TRC20"
+                      className="w-8 h-8"
+                    />{" "}
+                  </div>
+                </div>
+                {selectedPayment === "tether-bep20" && (
                   <div className="absolute top-2 right-2">
                     <FaCheckCircle className="text-white" size={20} />
                   </div>
