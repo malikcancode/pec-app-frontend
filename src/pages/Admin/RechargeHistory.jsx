@@ -1,33 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getAllTransactions } from "../../api/paymentApi";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function RechargeHistory() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const token = localStorage.getItem("token");
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchTransactions() {
       try {
         const res = await getAllTransactions(token);
-        setTransactions(res.data.transactions || []);
+
+        // ✅ Show only approved deposits
+        const approvedDeposits = (res.transactions || []).filter(
+          (tx) => tx.status === "approved" && tx.type === "deposit"
+        );
+
+        setTransactions(approvedDeposits);
       } catch (err) {
-        setTransactions([]);
         console.error("Failed to fetch transactions", err);
+        setTransactions([]);
       } finally {
         setLoading(false);
       }
     }
+
     fetchTransactions();
   }, [token]);
 
   return (
     <div className="bg-gray-800 rounded-lg shadow-md p-4">
-      <h2 className="text-xl font-semibold text-white mb-4">
-        Recharge History
+      <h2 className="text-xl font-semibold text-green-400 mb-4">
+        Approved Deposit History
       </h2>
 
+      {/* Scrollable Table */}
       <div className="max-h-[400px] overflow-y-auto">
         <table className="min-w-full text-sm text-left text-gray-300">
           <thead className="bg-gray-700 text-gray-100 sticky top-0 z-10">
@@ -53,7 +61,7 @@ export default function RechargeHistory() {
                   colSpan={6}
                   className="px-6 py-6 text-center font-semibold text-black bg-white"
                 >
-                  No transactions found.
+                  No approved deposit transactions found.
                 </td>
               </tr>
             ) : (
@@ -66,17 +74,9 @@ export default function RechargeHistory() {
                   <td className="px-6 py-3">
                     {tx.user?.name || tx.user || "N/A"}
                   </td>
-                  <td className="px-6 py-3">{tx.type}</td>
+                  <td className="px-6 py-3 capitalize">{tx.type}</td>
                   <td className="px-6 py-3">${tx.amount}</td>
-                  <td
-                    className={`px-6 py-3 font-medium ${
-                      tx.status === "approved"
-                        ? "text-green-400"
-                        : tx.status === "pending"
-                        ? "text-yellow-400"
-                        : "text-red-400"
-                    }`}
-                  >
+                  <td className="px-6 py-3 text-green-400 font-semibold">
                     {tx.status}
                   </td>
                   <td className="px-6 py-3">

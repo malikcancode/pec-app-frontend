@@ -164,3 +164,44 @@ export const verifyOrRejectKYC = (token, id, status) =>
       headers: { Authorization: `Bearer ${token}` },
     }
   );
+
+/* ---------------------- Announcements APIs ---------------------- */
+
+// ✅ Get all announcements (User + Admin)
+export const getAnnouncements = () => API.get("/announcements");
+
+// ✅ Create a new announcement (Admin)
+export const createAnnouncement = (token, data) =>
+  API.post("/announcements", data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+// ✅ Delete announcement (Admin)
+export const deleteAnnouncement = (token, id) =>
+  API.delete(`/announcements/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+/* ---------------------- Notifications APIs ---------------------- */
+
+// ✅ Get all notifications (Admin only)
+export const getNotifications = (token) =>
+  API.get("/notifications", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+// ✅ Mark a notification as read
+export const markNotificationRead = (token, id) =>
+  API.put(
+    `/notifications/${id}/read`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+// ✅ Delete a notification
+export const deleteNotification = (token, id) =>
+  API.delete(`/notifications/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });

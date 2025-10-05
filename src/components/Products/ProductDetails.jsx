@@ -1,7 +1,18 @@
+"use client";
+
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getMyPurchases } from "../../api/purchaseApi";
-import { FaBox, FaCreditCard, FaPlane, FaCheckCircle } from "react-icons/fa";
+import {
+  FaBox,
+  FaCreditCard,
+  FaPlane,
+  FaCheckCircle,
+  FaInfoCircle,
+  FaTruck,
+  FaDollarSign,
+  FaProjectDiagram,
+} from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function ProductDetails() {
@@ -16,7 +27,6 @@ export default function ProductDetails() {
       setLoading(true);
       try {
         const res = await getMyPurchases(token);
-        // Find the purchase for this product
         const found = res.data.purchases.find((p) => p.product?._id === id);
         setPurchase(found || null);
       } catch (err) {
@@ -26,7 +36,7 @@ export default function ProductDetails() {
       }
     };
     fetchPurchase();
-  }, [id]);
+  }, [id, token]);
 
   if (loading) return <p className="text-center mt-10">Loading...</p>;
   if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
@@ -37,9 +47,11 @@ export default function ProductDetails() {
 
   return (
     <div className="p-6 min-h-screen w-full">
-      <div className="max-w-7xl mx-auto rounded-2xl p-6 space-y-6">
+      {/* --- Upper Card --- */}
+      <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-md p-6 space-y-6">
         {/* --- Order Timeline --- */}
         <div className="space-y-6">
+          {/* Order Placed */}
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center text-white">
               <FaBox size={14} />
@@ -52,20 +64,18 @@ export default function ProductDetails() {
             </div>
           </div>
 
+          {/* Payment */}
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center text-white">
               <FaCreditCard size={14} />
             </div>
             <div>
               <p className="text-sm font-medium text-gray-700">Payment</p>
-              <p className="text-xs text-gray-500">
-                {paymentClaimedAt
-                  ? new Date(paymentClaimedAt).toLocaleString()
-                  : "Pending"}
-              </p>
+              <p className="text-xs text-green-600">Completed</p>
             </div>
           </div>
 
+          {/* Consignment */}
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center text-white">
               <FaPlane size={14} />
@@ -78,6 +88,7 @@ export default function ProductDetails() {
             </div>
           </div>
 
+          {/* Confirm Receipt */}
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
               <FaCheckCircle size={14} />
@@ -127,6 +138,82 @@ export default function ProductDetails() {
               </span>
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* --- Additional Info Cards Below --- */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        {/* Product Overview */}
+        <div className="bg-white shadow-md rounded-lg p-4 space-y-2 border border-gray-200">
+          <div className="flex items-center gap-2">
+            <FaInfoCircle className="text-green-600" />
+            <h3 className="text-md font-semibold text-gray-900">
+              Product Overview
+            </h3>
+          </div>
+          <p className="text-sm text-gray-700">
+            This product, <span className="font-semibold">{product.name}</span>,
+            belongs to the{" "}
+            <span className="text-green-600 font-medium">
+              {product.category}
+            </span>{" "}
+            category. It offers excellent quality and is highly rated by our
+            customers.
+          </p>
+        </div>
+
+        {/* Consignment Details */}
+        <div className="bg-white shadow-md rounded-lg p-4 space-y-2 border border-gray-200">
+          <div className="flex items-center gap-2">
+            <FaTruck className="text-green-600" />
+            <h3 className="text-md font-semibold text-gray-900">
+              Consignment & Shipping
+            </h3>
+          </div>
+          <p className="text-sm text-gray-700">
+            Your order was placed on{" "}
+            <span className="font-semibold">
+              {createdAt ? new Date(createdAt).toLocaleDateString() : "N/A"}
+            </span>{" "}
+            and has been processed for shipping. Estimated delivery is within{" "}
+            <span className="text-green-600 font-medium">2-3 days</span>.
+          </p>
+        </div>
+
+        {/* Payment Flow */}
+        <div className="bg-white shadow-md rounded-lg p-4 space-y-2 border border-gray-200">
+          <div className="flex items-center gap-2">
+            <FaDollarSign className="text-green-600" />
+            <h3 className="text-md font-semibold text-gray-900">
+              Payment Flow
+            </h3>
+          </div>
+          <p className="text-sm text-gray-700">
+            Payment was successfully processed automatically from your wallet.
+            Amount charged:{" "}
+            <span className="text-green-600 font-medium">
+              ${amount?.toFixed(2) || product.price?.toFixed(2)}
+            </span>
+            . No further action is required.
+          </p>
+        </div>
+
+        {/* Overall Order Process */}
+        <div className="bg-white shadow-md rounded-lg p-4 space-y-2 border border-gray-200">
+          <div className="flex items-center gap-2">
+            <FaProjectDiagram className="text-green-600" />
+            <h3 className="text-md font-semibold text-gray-900">
+              Order Process
+            </h3>
+          </div>
+          <p className="text-sm text-gray-700">
+            Your order follows a smooth flow:{" "}
+            <span className="font-semibold">
+              Order Placed → Payment Completed → Consignment → Confirm Receipt
+            </span>
+            . You can track each step in the timeline above. Once received,
+            confirm receipt to complete the process.
+          </p>
         </div>
       </div>
     </div>

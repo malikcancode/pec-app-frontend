@@ -1,29 +1,29 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaMoneyBillWave, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaMoneyBillWave } from "react-icons/fa";
 import { PiHandDepositFill } from "react-icons/pi";
 import { MdAccountBalance } from "react-icons/md";
-import Header from "../components/Header";
 import BottomNavigation from "../components/BottomNavigation";
 import PaymentConfirmationModal from "../pages/PaymentConfirmation";
 import PaymentQRCode from "./PaymentQRCode";
+import WithdrawModal from "../components/WithdrawModal"; // <-- import your new modal
 import { AuthContext } from "../context/AuthContext";
 import { getMyTransactions } from "../api/paymentApi";
 
 export default function Wallet() {
-  const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
+
   const [activeTab, setActiveTab] = useState("account");
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false); // <-- new
   const [showQRCode, setShowQRCode] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState({});
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [depositAmount, setDepositAmount] = useState("");
   const [currentOrderNumber, setCurrentOrderNumber] = useState("");
-  const { token } = useContext(AuthContext);
   const [userBalance, setUserBalance] = useState(0);
-  const [transactions, setTransactions] = useState([]); // <--
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     const fetchBalance = async () => {
@@ -35,14 +35,14 @@ export default function Wallet() {
         }
 
         if (Array.isArray(res.data.transactions)) {
-          setTransactions(res.data.transactions); // <-- set real txns
+          setTransactions(res.data.transactions);
         }
       } catch (err) {
         console.error("Failed to fetch transactions", err);
       }
     };
     fetchBalance();
-  }, [token, showPaymentModal, showDepositModal]);
+  }, [token, showPaymentModal, showDepositModal, showWithdrawModal]);
 
   const handleDeposit = () => {
     if (!depositAmount || Number(depositAmount) <= 0) {
@@ -51,7 +51,7 @@ export default function Wallet() {
     }
 
     const orderNumber = generateOrderNumber();
-    setCurrentOrderNumber(orderNumber); // store it here
+    setCurrentOrderNumber(orderNumber);
     setShowDepositModal(false);
     setShowPaymentModal(true);
   };
@@ -65,7 +65,7 @@ export default function Wallet() {
     if (selectedPayment === "tether") {
       setPaymentDetails({
         amount: depositAmount,
-        orderNumber: currentOrderNumber, // <-- keep the same
+        orderNumber: currentOrderNumber,
         address: "TX123TRC20EXAMPLEADDRESS",
       });
       setShowPaymentModal(false);
@@ -122,7 +122,7 @@ export default function Wallet() {
               <PiHandDepositFill className="mr-2" /> Deposit
             </button>
             <button
-              onClick={() => navigate("/withdraw")}
+              onClick={() => setShowWithdrawModal(true)} // <-- open withdraw modal
               className="flex items-center justify-center bg-white text-black font-semibold py-3 px-4 transition-colors"
             >
               <FaMoneyBillWave className="mr-2" /> Withdrawal
@@ -210,9 +210,65 @@ export default function Wallet() {
             )}
 
             {activeTab === "withdrawal" && (
-              <div className="text-center text-gray-500">
-                Withdrawal records coming soon
-              </div>
+              <>
+                {transactions.filter((txn) => txn.type === "withdraw")
+                  .length === 0 ? (
+                  <div className="text-center text-gray-500">
+                    No withdrawal records yet
+                  </div>
+                ) : (
+                  transactions
+                    .filter((txn) => txn.type === "withdraw")
+                    .map((txn) => (
+                      <div
+                        key={txn._id}
+                        className="bg-white rounded-lg shadow-md border-l-4 border-yellow-500 p-4"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center">
+                            <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                            <span className="text-sm text-gray-600">
+                              {txn.method || "N/A"}
+                            </span>
+                          </div>
+                          <span className="text-sm font-medium text-gray-900">
+                            {new Date(txn.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        <div className="ml-0 md:ml-4">
+                          <div
+                            className={`text-lg font-bold mb-1 ${
+                              txn.status === "approved"
+                                ? "text-green-600"
+                                : txn.status === "rejected"
+                                ? "text-red-600"
+                                : "text-yellow-600"
+                            }`}
+                          >
+                            {txn.status.charAt(0).toUpperCase() +
+                              txn.status.slice(1)}
+                          </div>
+
+                          <div className="flex justify-between text-sm text-gray-600 mb-1">
+                            <span>Withdrawal amount</span>
+                            <span className="text-red-500">- {txn.amount}</span>
+                          </div>
+
+                          <div className="flex justify-between text-sm text-gray-600 mb-1">
+                            <span>Account Name</span>
+                            <span>{txn.accountName || "N/A"}</span>
+                          </div>
+
+                          <div className="flex justify-between text-sm text-gray-600">
+                            <span>Account Number</span>
+                            <span>{txn.accountNumber || "N/A"}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </>
             )}
           </div>
         </div>
@@ -223,8 +279,6 @@ export default function Wallet() {
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white p-6 w-96 rounded-lg">
             <h2 className="text-lg font-semibold mb-4">Deposit Amount</h2>
-
-            {/* Input Box */}
             <div className="flex items-center mb-4 border px-3 py-2">
               <span className="mr-2 text-gray-500">$</span>
               <input
@@ -235,36 +289,28 @@ export default function Wallet() {
                 className="w-full outline-none text-gray-900"
               />
             </div>
-
-            {/* Quick Select Amounts */}
             <div className="grid grid-cols-4 gap-2 mb-4">
               {[30, 100, 200, 500, 1000, 5000, 50000, 100000].map((amt) => (
                 <button
                   key={amt}
                   type="button"
                   onClick={() => setDepositAmount(amt)}
-                  className={`px-2 py-2 rounded-md font-semibold text-white 
-              ${
-                depositAmount == amt
-                  ? "bg-green-600"
-                  : "bg-green-500 hover:bg-green-600"
-              }
-            `}
+                  className={`px-2 py-2 rounded-md font-semibold text-white ${
+                    depositAmount == amt
+                      ? "bg-green-600"
+                      : "bg-green-500 hover:bg-green-600"
+                  }`}
                 >
                   {amt.toLocaleString()}
                 </button>
               ))}
             </div>
-
-            {/* Deposit Button */}
             <button
               onClick={handleDeposit}
               className="w-full bg-green-500 text-white rounded-md font-semibold py-2 transition-colors hover:bg-green-600"
             >
               Deposit
             </button>
-
-            {/* Cancel Button */}
             <button
               onClick={() => setShowDepositModal(false)}
               className="mt-2 w-full bg-gray-200 text-gray-700 rounded-md font-semibold py-2 hover:bg-gray-300"
@@ -275,13 +321,22 @@ export default function Wallet() {
         </div>
       )}
 
+      {/* Withdraw Modal */}
+      {showWithdrawModal && (
+        <WithdrawModal
+          isOpen={showWithdrawModal}
+          onClose={() => setShowWithdrawModal(false)}
+          onSuccess={() => setShowWithdrawModal(false)} // refresh after success
+        />
+      )}
+
       {/* Payment Confirmation Modal */}
       <PaymentConfirmationModal
         isOpen={showPaymentModal}
         onClose={handlePaymentModalClose}
         amount={depositAmount}
         onConfirm={handleConfirmPayment}
-        orderNumber={currentOrderNumber} // <-- use state
+        orderNumber={currentOrderNumber}
       />
 
       {/* Payment QR Code Modal */}
@@ -290,7 +345,7 @@ export default function Wallet() {
           amount={paymentDetails.amount}
           orderNumber={paymentDetails.orderNumber}
           address={paymentDetails.address}
-          onClose={handleQRCodeClose} // <-- use this
+          onClose={handleQRCodeClose}
         />
       )}
 

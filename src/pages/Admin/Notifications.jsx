@@ -1,67 +1,60 @@
-import React, { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+import React, { useEffect, useState, useContext } from "react";
+import { getNotifications } from "../../api/api";
+import { AuthContext } from "../../context/AuthContext";
+import { FaBell } from "react-icons/fa";
 
-function Notifications() {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      message: "Product 1 has been successfully added.",
-      date: "2025-09-25",
-    },
-    { id: 2, message: "Order #12345 has been shipped.", date: "2025-09-24" },
-    {
-      id: 3,
-      message: "User John Doe has updated their profile.",
-      date: "2025-09-23",
-    },
-    // Add more sample notifications as needed
-  ]);
+export default function Notifications() {
+  const { token } = useContext(AuthContext);
+  const [notifications, setNotifications] = useState([]);
 
-  // Delete a notification by ID
-  const handleDeleteNotification = (id) => {
-    setNotifications(
-      notifications.filter((notification) => notification.id !== id)
-    );
-  };
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchNotifications = async () => {
+      try {
+        const { data } = await getNotifications(token);
+        console.log("Notifications API response:", data);
+
+        // ✅ Defensive: ensure it's always an array
+        setNotifications(
+          Array.isArray(data.notifications) ? data.notifications : []
+        );
+      } catch (err) {
+        console.error("Failed to fetch notifications", err);
+        setNotifications([]); // fallback empty
+      }
+    };
+
+    fetchNotifications();
+  }, [token]);
 
   return (
-    <div className="min-h-screen flex flex-col justify-start items-center px-1">
-      <div className="max-w-7xl w-full">
-        {/* <h1 className="text-3xl font-semibold text-start mb-6 text-gray-100">
-          Notifications
-        </h1> */}
+    <div className="p-6 min-h-screen bg-gray-50">
+      <h1 className="text-2xl font-bold text-green-600 mb-6 flex items-center gap-2">
+        <FaBell className="text-green-500" /> Notifications
+      </h1>
 
-        {/* Notifications Table */}
-        <div className="overflow-x-auto bg-gray-800 rounded-lg shadow-md">
-          <table className="min-w-full text-sm text-left text-gray-300">
-            <thead className="bg-gray-700 text-gray-100">
-              <tr>
-                <th className="px-6 py-3">Message</th>
-                <th className="px-6 py-3">Date</th>
-                <th className="px-6 py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {notifications.map((notification) => (
-                <tr key={notification.id} className="border-b border-gray-600">
-                  <td className="px-6 py-3">{notification.message}</td>
-                  <td className="px-6 py-3">{notification.date}</td>
-                  <td className="px-6 py-3 flex space-x-4">
-                    <button
-                      onClick={() => handleDeleteNotification(notification.id)}
-                      className="text-red-500 hover:text-red-600"
-                    >
-                      <FaTrashAlt />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100 space-y-4">
+        {notifications.length === 0 ? (
+          <p className="text-gray-600">No notifications available.</p>
+        ) : (
+          notifications.map((noti, index) => (
+            <div
+              key={index}
+              className={`p-4 rounded-lg ${
+                noti.isRead
+                  ? "bg-gray-100"
+                  : "bg-green-50 border border-green-200"
+              }`}
+            >
+              <p className="text-gray-800 font-medium">{noti.message}</p>
+              <p className="text-gray-500 text-sm">
+                {new Date(noti.createdAt).toLocaleString()}
+              </p>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
 }
-
-export default Notifications;

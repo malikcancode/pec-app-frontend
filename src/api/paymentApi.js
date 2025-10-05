@@ -60,10 +60,13 @@ export const rejectWithdraw = (token, transactionId) =>
   );
 
 // Get all transactions (admin view)
-export const getAllTransactions = (token) =>
-  API.get("/wallet/transactions", {
+export const getAllTransactions = async (token, status) => {
+  const res = await API.get("/wallet/transactions", {
     headers: { Authorization: `Bearer ${token}` },
+    params: { status },
   });
+  return res.data; // ✅ ensures we get { success, transactions }
+};
 
 // Get pending transactions (admin view)
 export const getPendingTransactions = (token) =>

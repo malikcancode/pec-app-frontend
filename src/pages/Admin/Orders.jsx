@@ -1,86 +1,107 @@
-import React, { useState } from "react";
-import { FaTrashAlt } from "react-icons/fa";
+"use client";
 
-function Orders() {
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      orderNumber: "ORD001",
-      customerName: "John Doe",
-      totalAmount: 120,
-      orderDate: "2025-09-25",
-    },
-    {
-      id: 2,
-      orderNumber: "ORD002",
-      customerName: "Jane Smith",
-      totalAmount: 150,
-      orderDate: "2025-09-24",
-    },
-    {
-      id: 3,
-      orderNumber: "ORD003",
-      customerName: "Sam Wilson",
-      totalAmount: 80,
-      orderDate: "2025-09-23",
-    },
-    // Add more sample orders as needed
-  ]);
+import React, { useEffect, useState, useContext } from "react";
+import { FaTrashAlt, FaCheck, FaTimes } from "react-icons/fa";
+import { getAllPurchases, claimProfit } from "../../api/purchaseApi";
+import { AuthContext } from "../../context/AuthContext";
 
-  // Delete an order by ID
-  const handleDeleteOrder = (id) => {
-    setOrders(orders.filter((order) => order.id !== id));
-  };
-
+// Reusable Table component
+function Table({ orders, onDelete }) {
   return (
-    <div className="min-h-screen flex flex-col justify-start items-center px-4 sm:px-6 md:px-8 py-6">
-      <div className="max-w-7xl w-full">
-        {/* Orders Table */}
-        <div className="bg-gray-800 rounded-lg shadow-md">
-          {/* Fixed height + scrollable inside */}
-          <div className="max-h-[400px] overflow-y-auto">
-            <table className="min-w-full text-sm text-left text-gray-300">
-              <thead className="bg-gray-700 text-gray-100 sticky top-0 z-10">
-                <tr>
-                  <th className="px-4 py-2 sm:px-6 md:px-8">Order Number</th>
-                  <th className="px-4 py-2 sm:px-6 md:px-8">Customer Name</th>
-                  <th className="px-4 py-2 sm:px-6 md:px-8">Total Amount</th>
-                  <th className="px-4 py-2 sm:px-6 md:px-8">Order Date</th>
-                  <th className="px-4 py-2 sm:px-6 md:px-8">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-600">
-                    <td className="px-4 py-2 sm:px-6 md:px-8">
-                      {order.orderNumber}
-                    </td>
-                    <td className="px-4 py-2 sm:px-6 md:px-8">
-                      {order.customerName}
-                    </td>
-                    <td className="px-4 py-2 sm:px-6 md:px-8">
-                      ${order.totalAmount}
-                    </td>
-                    <td className="px-4 py-2 sm:px-6 md:px-8">
-                      {order.orderDate}
-                    </td>
-                    <td className="px-4 py-2 sm:px-6 md:px-8 flex space-x-4 justify-center">
-                      <button
-                        onClick={() => handleDeleteOrder(order.id)}
-                        className="text-red-500 hover:text-red-600 text-lg sm:text-xl md:text-2xl"
-                      >
-                        <FaTrashAlt />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <div className="bg-gray-800 rounded-lg shadow-md">
+      <div className="max-h-[400px] overflow-y-auto">
+        <table className="min-w-full text-sm text-left text-gray-300">
+          <thead className="bg-gray-700 text-gray-100 sticky top-0 z-10">
+            <tr>
+              <th className="px-6 py-3">Order Number</th>
+              <th className="px-6 py-3">Customer Name</th>
+              <th className="px-6 py-3">Product</th>
+              <th className="px-6 py-3">Amount</th>
+              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3 text-center">Claimed</th>
+              <th className="px-6 py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr
+                key={order._id}
+                className="border-b border-gray-600 hover:bg-gray-700"
+              >
+                <td className="px-6 py-3">{order._id}</td>
+                <td className="px-6 py-3">{order.user?.name || "N/A"}</td>
+                <td className="px-6 py-3">{order.product?.name || "N/A"}</td>
+                <td className="px-6 py-3">${order.amount?.toFixed(2)}</td>
+                <td className="px-6 py-3">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </td>
+
+                {/* Claimed column */}
+                <td className="px-6 py-3 flex items-center justify-center">
+                  {order.paymentClaimedAt ? (
+                    <FaCheck className="text-green-500" />
+                  ) : (
+                    <FaTimes className="text-red-500" />
+                  )}
+                </td>
+
+                {/* Actions column */}
+                <td className="px-6 py-3 flex justify-center">
+                  <button
+                    onClick={() => onDelete(order._id)}
+                    className="text-red-500 hover:text-red-600"
+                  >
+                    <FaTrashAlt />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 }
 
-export default Orders;
+export default function Orders() {
+  const { token } = useContext(AuthContext);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const res = await getAllPurchases(token);
+        setOrders(res.data.purchases || []);
+      } catch (err) {
+        setError("Failed to load orders.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [token]);
+
+  // Delete order
+  const handleDeleteOrder = async (id) => {
+    try {
+      await claimProfit(token, id); // or call your delete API here
+      setOrders(orders.filter((order) => order._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (loading) return <p className="text-center mt-10">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
+
+  return (
+    <div className="min-h-screen flex flex-col justify-start items-center px-4 sm:px-6 md:px-8 py-6">
+      <div className="max-w-7xl w-full">
+        <Table orders={orders} onDelete={handleDeleteOrder} />
+      </div>
+    </div>
+  );
+}

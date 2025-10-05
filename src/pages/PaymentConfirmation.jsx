@@ -132,7 +132,7 @@ export default function PaymentConfirmationModal({
               {/* Tether TRC20 Option */}
               <div
                 onClick={() => setSelectedPayment("tether-trc20")}
-                className={`relative bg-green-500 p-4 mb-3 cursor-pointer transition-all ${
+                className={`relative bg-green-500 rounded-md p-4 mb-3 cursor-pointer transition-all ${
                   selectedPayment === "tether-trc20"
                     ? "ring-2 ring-green-600"
                     : ""
@@ -146,7 +146,7 @@ export default function PaymentConfirmationModal({
                   <img
                     src="/tether-usdt-logo.png" // Existing logo
                     alt="USDT TRC20"
-                    className="w-8 h-8"
+                    className="w-16 h-auto"
                   />
                 </div>
                 {selectedPayment === "tether-trc20" && (
@@ -159,22 +159,22 @@ export default function PaymentConfirmationModal({
               {/* Tether BEP20 Option */}
               <div
                 onClick={() => setSelectedPayment("tether-bep20")}
-                className={`relative bg-green-500 p-4 mb-3 cursor-pointer transition-all ${
+                className={`relative border text-green-500 border-green-500 p-4 rounded-md mb-3 cursor-pointer transition-all ${
                   selectedPayment === "tether-bep20"
                     ? "ring-2 ring-green-600"
                     : ""
                 }`}
               >
-                <div className="flex items-center justify-between text-white">
+                <div className="flex items-center justify-between text-black">
                   <div>
                     <div className="font-semibold text-lg">Tether</div>
                     <div className="text-sm opacity-90">USDT (BEP20)</div>
                   </div>
-                  <div className="w-8 h-8 border-2 border-white rounded flex items-center justify-center text-white text-xs">
+                  <div className="w-8 h-8 border-2 border-white rounded flex items-center justify-center text-black text-xs">
                     <img
                       src="/bdep.webp" // Existing logo
                       alt="USDT TRC20"
-                      className="w-8 h-8"
+                      className="w-32 "
                     />{" "}
                   </div>
                 </div>

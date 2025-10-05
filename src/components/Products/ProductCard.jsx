@@ -69,7 +69,7 @@ export default function ProductCard({ product }) {
               e.stopPropagation();
               setShowModal(true); // ✅ open modal via button
             }}
-            className=" text-black border-green-500 border text-[8px] font-medium px-[8px] py-1 transition"
+            className=" text-black border-green-500 border rounded-md text-[8px] font-medium px-[8px] py-1 transition"
           >
             Buy Now
           </button>

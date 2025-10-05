@@ -40,7 +40,7 @@ const Register = lazy(() => import("./pages/Auth/Register"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Wallet = lazy(() => import("./pages/Wallet"));
 const OrderCenter = lazy(() => import("./pages/OrderCenter"));
-const Withdraw = lazy(() => import("./pages/Withdraw"));
+// const Withdraw = lazy(() => import("./pages/Withdraw"));
 const PaymentConfirmation = lazy(() => import("./pages/PaymentConfirmation"));
 const About = lazy(() => import("./pages/About"));
 const FAQs = lazy(() => import("./pages/FAQs"));
@@ -269,7 +269,7 @@ function App() {
               }
             />
 
-            <Route
+            {/* <Route
               path="/withdraw"
               element={
                 <ProtectedRoute allowedRoles={["user"]}>
@@ -278,7 +278,7 @@ function App() {
                   </DashboardLayout>
                 </ProtectedRoute>
               }
-            />
+            /> */}
 
             <Route
               path="/payment-confirmation"

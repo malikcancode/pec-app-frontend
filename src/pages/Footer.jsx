@@ -7,7 +7,7 @@ function Footer() {
         {/* Top Section */}
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-green-500">
-            partnersellercentre
+            partner seller centre
           </h2>
         </div>
 

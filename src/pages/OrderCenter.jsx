@@ -8,8 +8,7 @@ import {
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
 } from "react-icons/fa";
-import { getMyPurchases } from "../api/purchaseApi";
-import { claimProfit } from "../api/purchaseApi";
+import { getMyPurchases, claimProfit } from "../api/purchaseApi";
 import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContext";
 
@@ -35,7 +34,7 @@ export default function OrderCenter() {
       }
     };
     fetchPurchases();
-  }, []);
+  }, [token]);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -47,7 +46,6 @@ export default function OrderCenter() {
     try {
       const res = await claimProfit(token, purchaseId);
       toast.success(res.data.message || "Profit claimed!");
-      // Refresh purchases list to update status
       const updatedPurchases = purchases.map((p) =>
         p._id === purchaseId
           ? { ...p, status: "paid", paymentClaimedAt: new Date() }
@@ -69,94 +67,104 @@ export default function OrderCenter() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header with Estimate Profit */}
       <div className="mb-6">
         <h1 className="text-lg font-semibold text-gray-900">
-          {/* Estimate Profit: {purchases.length > 0 ? "24.68" : "0.00"} */}
+          Profit can be claimed only after 72 hours from purchase.
         </h1>
       </div>
 
-      {/* Order Cards */}
       <div className="space-y-4 mb-8">
         {loading ? (
           <p className="text-gray-500 text-center">Loading...</p>
         ) : purchases.length === 0 ? (
           <p className="text-gray-500 text-center">No orders yet.</p>
         ) : (
-          purchases.map((purchase) => (
-            <div
-              key={purchase._id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
-            >
-              {/* Order Header */}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm text-gray-600">{purchase._id}</span>
-                <span className="text-sm text-green-600 font-medium">
-                  {purchase.status || "Completed"}
-                </span>
-              </div>
+          purchases.map((purchase) => {
+            const purchaseTime = new Date(purchase.createdAt);
+            const now = new Date();
+            const hoursSincePurchase = (now - purchaseTime) / (1000 * 60 * 60);
+            const remainingHours = Math.ceil(72 - hoursSincePurchase);
 
-              {/* Product Info */}
-              <div className="flex items-center space-x-4 mb-4">
-                {/* Product Image */}
-                <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
-                  <img
-                    src={purchase.product?.image || "/placeholder.svg"}
-                    alt={purchase.product?.name}
-                    className="w-full h-full object-cover"
-                  />
+            return (
+              <div
+                key={purchase._id}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
+              >
+                {/* Order Header */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm text-gray-600">{purchase._id}</span>
+                  <span className="text-sm text-green-600 font-medium">
+                    {purchase.status || "Completed"}
+                  </span>
                 </div>
 
-                {/* Product Details */}
-                <div className="flex-1">
-                  <h3 className="font-medium text-gray-900 mb-1">
-                    {purchase.product?.name}
-                  </h3>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-semibold text-gray-900">
-                      ${purchase.product?.price?.toFixed(2)} × 1
-                    </span>
+                {/* Product Info */}
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
+                    <img
+                      src={purchase.product?.image || "/placeholder.svg"}
+                      alt={purchase.product?.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-gray-900 mb-1">
+                      {purchase.product?.name}
+                    </h3>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-semibold text-gray-900">
+                        ${purchase.product?.price?.toFixed(2)} × 1
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center space-x-3">
-                <button
-                  onClick={() => handleDetailsClick(purchase)}
-                  className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  Details
-                </button>
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => handleDetailsClick(purchase)}
+                    className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Details
+                  </button>
+                  <button className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Transfer
+                  </button>
 
-                <button className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
-                  Transfer
-                </button>
-                {purchase.status === "to_be_paid" ? (
-                  <button
-                    className="flex-1 py-2 px-4 bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors"
-                    onClick={() => handleClaimProfit(purchase._id)}
-                  >
-                    Payment
-                  </button>
-                ) : (
-                  <button
-                    className="flex-1 py-2 px-4 bg-gray-300 text-white text-sm font-medium cursor-not-allowed"
-                    disabled
-                  >
-                    Paid
-                  </button>
-                )}
+                  {purchase.status === "to_be_paid" ? (
+                    hoursSincePurchase >= 72 ? (
+                      <button
+                        className="flex-1 py-2 px-4 bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors"
+                        onClick={() => handleClaimProfit(purchase._id)}
+                      >
+                        Payment
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="flex-1 py-2 px-4 bg-gray-300 text-white text-sm font-medium cursor-not-allowed"
+                      >
+                        Claim in {remainingHours}h
+                      </button>
+                    )
+                  ) : (
+                    <button
+                      className="flex-1 py-2 px-4 bg-gray-300 text-white text-sm font-medium cursor-not-allowed"
+                      disabled
+                    >
+                      Paid
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
       {/* Pagination */}
       {purchases.length > 0 && (
         <div className="flex items-center justify-center space-x-2">
-          {/* First Page */}
           <button
             onClick={() => handlePageChange(1)}
             disabled={currentPage === 1}
@@ -164,8 +172,6 @@ export default function OrderCenter() {
           >
             <FaAngleDoubleLeft size={14} />
           </button>
-
-          {/* Previous Page */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -173,8 +179,6 @@ export default function OrderCenter() {
           >
             <FaChevronLeft size={14} />
           </button>
-
-          {/* Page Numbers */}
           {[1, 2, 3, 4, 5].map((page) => (
             <button
               key={page}
@@ -188,8 +192,6 @@ export default function OrderCenter() {
               {page}
             </button>
           ))}
-
-          {/* Next Page */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
@@ -197,8 +199,6 @@ export default function OrderCenter() {
           >
             <FaChevronRight size={14} />
           </button>
-
-          {/* Last Page */}
           <button
             onClick={() => handlePageChange(totalPages)}
             disabled={currentPage === totalPages}
