@@ -69,7 +69,8 @@ export default function OrderCenter() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="mb-6">
         <h1 className="text-lg font-semibold text-gray-900">
-          Profit can be claimed only after 72 hours from purchase.
+          Dropshipping in progress — your product is expected to sell within 72
+          hours.
         </h1>
       </div>
 
@@ -127,34 +128,21 @@ export default function OrderCenter() {
                   >
                     Details
                   </button>
+
                   <button className="flex-1 py-2 px-4 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
                     Transfer
                   </button>
 
-                  {purchase.status === "to_be_paid" ? (
-                    hoursSincePurchase >= 72 ? (
-                      <button
-                        className="flex-1 py-2 px-4 bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors"
-                        onClick={() => handleClaimProfit(purchase._id)}
-                      >
-                        Payment
-                      </button>
-                    ) : (
-                      <button
-                        disabled
-                        className="flex-1 py-2 px-4 bg-gray-300 text-white text-sm font-medium cursor-not-allowed"
-                      >
-                        Claim in {remainingHours}h
-                      </button>
-                    )
-                  ) : (
-                    <button
-                      className="flex-1 py-2 px-4 bg-gray-300 text-white text-sm font-medium cursor-not-allowed"
-                      disabled
-                    >
-                      Paid
-                    </button>
-                  )}
+                  <button
+                    onClick={() => {
+                      toast.info(
+                        "You will receive your payment within 72 hours."
+                      );
+                    }}
+                    className="flex-1 py-2 px-4 bg-green-500 text-white text-sm font-medium hover:bg-green-600 transition-colors"
+                  >
+                    Payment
+                  </button>
                 </div>
               </div>
             );
