@@ -131,11 +131,9 @@ export default function PaymentConfirmationModal({
 
               {/* Tether TRC20 Option */}
               <div
-                onClick={() => setSelectedPayment("tether-trc20")}
+                onClick={() => setSelectedPayment("trc20")}
                 className={`relative bg-green-500 rounded-md p-4 mb-3 cursor-pointer transition-all ${
-                  selectedPayment === "tether-trc20"
-                    ? "ring-2 ring-green-600"
-                    : ""
+                  selectedPayment === "trc20" ? "ring-2 ring-green-600" : ""
                 }`}
               >
                 <div className="flex items-center justify-between text-white">
@@ -158,11 +156,9 @@ export default function PaymentConfirmationModal({
 
               {/* Tether BEP20 Option */}
               <div
-                onClick={() => setSelectedPayment("tether-bep20")}
+                onClick={() => setSelectedPayment("bep20")}
                 className={`relative border text-green-500 border-green-500 p-4 rounded-md mb-3 cursor-pointer transition-all ${
-                  selectedPayment === "tether-bep20"
-                    ? "ring-2 ring-green-600"
-                    : ""
+                  selectedPayment === "bep20" ? "ring-2 ring-green-600" : ""
                 }`}
               >
                 <div className="flex items-center justify-between text-black">

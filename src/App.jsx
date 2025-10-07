@@ -32,6 +32,8 @@ import WithdrawHistory from "./pages/Admin/WithdrawHistory";
 import Bonus from "./pages/Admin/Bonus";
 import AdminMessages from "./pages/Admin/AdminMessages";
 import AdminKYC from "./pages/Admin/AdminKYC";
+import Success from "./pages/Success";
+import Fail from "./pages/Fail";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -110,6 +112,28 @@ function App() {
                 <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Products />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/success"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <DashboardLayout>
+                    <Success />{" "}
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/fail"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <DashboardLayout>
+                    <Fail />{" "}
                   </DashboardLayout>
                 </ProtectedRoute>
               }

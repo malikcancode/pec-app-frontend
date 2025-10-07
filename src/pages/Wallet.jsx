@@ -10,9 +10,10 @@ import PaymentQRCode from "./PaymentQRCode";
 import WithdrawModal from "../components/WithdrawModal"; // <-- import your new modal
 import { AuthContext } from "../context/AuthContext";
 import { getMyTransactions } from "../api/paymentApi";
+import { initDeposit } from "../api/deposit";
 
 export default function Wallet() {
-  const { token } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
 
   const [activeTab, setActiveTab] = useState("account");
   const [showDepositModal, setShowDepositModal] = useState(false);
@@ -61,19 +62,33 @@ export default function Wallet() {
     setDepositAmount("");
   };
 
-  const handleConfirmPayment = (selectedPayment) => {
-    if (selectedPayment === "tether") {
-      setPaymentDetails({
-        amount: depositAmount,
-        orderNumber: currentOrderNumber,
-        address: "TX123TRC20EXAMPLEADDRESS",
-      });
-      setShowPaymentModal(false);
-      setShowQRCode(true);
-    } else {
-      alert("Card payments are not implemented yet.");
-    }
-  };
+ const handleConfirmPayment = async (selectedPayment) => {
+   if (selectedPayment === "trc20" || selectedPayment === "bep20") {
+     try {
+       const res = await initDeposit({
+         userId: user._id,
+         amount: depositAmount,
+         network: selectedPayment, // <-- send network
+       });
+
+       const { orderId, wallet } = res.data;
+
+       setPaymentDetails({
+         amount: depositAmount,
+         orderNumber: orderId,
+         address: wallet,
+       });
+
+       setShowPaymentModal(false);
+       setShowQRCode(true);
+     } catch (err) {
+       console.error("Deposit init failed:", err);
+       alert("Failed to initiate deposit");
+     }
+   } else {
+     alert("Other methods not implemented yet.");
+   }
+ };
 
   const generateOrderNumber = () => {
     return `${new Date().getFullYear()}${String(

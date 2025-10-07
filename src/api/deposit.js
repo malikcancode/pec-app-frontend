@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://pec-app-backend.vercel.app/api/deposit",
-  // Or simply baseURL: "/api/deposit" if you're using the proxy setup
+  baseURL: "https://pec-app-backend.vercel.app/api/deposit", // ✅ Deployed backend URL
+  // baseURL: "http://localhost:5000/api/deposit",
 });
 
 // 🪙 1. Initialize a deposit (generate address)
