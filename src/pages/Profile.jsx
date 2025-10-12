@@ -18,7 +18,6 @@ export default function Profile() {
   const [name, setName] = useState(user?.name || "");
   const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(false);
-
   if (!user) {
     return <p className="text-center mt-10">Loading profile...</p>;
   }
@@ -106,7 +105,7 @@ export default function Profile() {
     },
     {
       label: "Wallet Balance",
-      value: `$${user.walletBalance}`,
+      value: `$${user.balance}`,
       icon: <FaWallet />,
     },
     {

@@ -43,10 +43,37 @@ export const getUsers = (token) =>
     headers: { Authorization: `Bearer ${token}` }, // Pass token for authentication
   });
 
+export const getMyReferrals = (token) =>
+  API.get("/referral/my-referrals", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const getAllOrders = (token) =>
+  API.get("/admin/orders", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const getBasicStats = (token) =>
+  API.get("/statistics/basic", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+// Get total revenue (admin)
+export const getTotalRevenue = (token) =>
+  API.get("/admin/revenue", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
 export const deleteUser = (token, userId) =>
   API.delete(`/admin/users/${userId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+export const updateUserStatus = (token, userId, status) =>
+  API.put(
+    `/admin/users/${userId}/status`,
+    { status },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
 // Update user profile (name + profile image)
 export const updateProfile = (token, data) => {

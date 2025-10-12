@@ -18,100 +18,52 @@ export default function Chat() {
     Crisp.chat.open();
   };
 
-  const steps = [
-    {
-      title: "Contact Customer Care",
-      details: [
-        "Reach out via our website chat, email, or phone for any assistance.",
-        "Provide your account details so we can assist you efficiently.",
-      ],
-    },
-    {
-      title: "Describe Your Query",
-      details: [
-        "Clearly explain the issue or question you have.",
-        "Include transaction details if your query is related to payments.",
-      ],
-    },
-    {
-      title: "Receive Guidance",
-      details: [
-        "Our support team will guide you step by step to resolve the issue.",
-        "We may request additional documents or information if required.",
-      ],
-    },
-    {
-      title: "Confirmation & Resolution",
-      details: [
-        "Once your query is verified, we provide a solution or confirmation.",
-        "Keep any reference number or confirmation for future reference.",
-      ],
-    },
+  const rechargeSteps = [
+    "Chat with customer support to initiate recharge request.",
+    "Get payment link/details for the requested recharge amount.",
+    "Copy the link and make payment.",
+    "Add Transaction ID/UTR to complete recharge.",
+    "Pay the exact amount as requested.",
+    "Wait for confirmation and recharge credit.",
+    "Provide payment screenshot for fast verification.",
   ];
 
-  const importantDetails = [
-    "Customer support is available 24/7 for urgent queries.",
-    "Please provide accurate information to avoid delays.",
-    "Keep transaction IDs or receipts handy for payment-related inquiries.",
-    "We aim to respond within 24 hours for most queries.",
-  ];
-
-  const additionalRequirements = [
-    "Use the chat button below to instantly connect with our support team.",
-    "Ensure your contact details are up to date for prompt assistance.",
+  const importantCautions = [
+    "Pay exact amount.",
+    "Provide Transaction ID/UTR.",
+    "Failure to do so may result in non-crediting of recharge amount.",
   ];
 
   return (
     <div className="p-6 min-h-screen bg-gray-50">
       <h1 className="text-2xl font-bold text-green-600 mb-6 flex items-center gap-2">
-        <FaComments className="text-green-500" /> Customer Care
+        <FaComments className="text-green-500" /> Offline Recharge Steps
       </h1>
 
-      {/* Instructions Card */}
       <div className="bg-white shadow-md rounded-lg p-6 border border-green-200 mb-6">
         <h2 className="text-2xl font-bold text-green-600 mb-6 text-start">
-          How to Reach Our Customer Support
+          Follow These Steps for Offline Recharge
         </h2>
 
-        {steps.map((step, index) => (
-          <div
-            key={index}
-            className="bg-green-50 border-l-4 border-green-600 p-4 rounded-lg mb-4 shadow-sm"
-          >
-            <h3 className="text-lg font-semibold text-green-700 mb-2">
-              {index + 1}. {step.title}
-            </h3>
-            <ul className="list-disc list-inside text-gray-800 space-y-1">
-              {step.details.map((detail, i) => (
-                <li key={i}>{detail}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-
         <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded-lg mb-4 shadow-sm">
-          <h3 className="text-lg font-semibold text-green-700 mb-2">
-            Important Details
-          </h3>
-          <ul className="list-disc list-inside text-gray-800 space-y-1">
-            {importantDetails.map((item, i) => (
-              <li key={i}>{item}</li>
+          <ul className="list-decimal list-inside text-gray-800 space-y-2">
+            {rechargeSteps.map((step, index) => (
+              <li key={index}>{step}</li>
             ))}
           </ul>
         </div>
 
-        <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded-lg mb-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-green-700 mb-2">
-            Additional Tips
+        <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg mb-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-yellow-700 mb-2">
+            Important Caution
           </h3>
           <ul className="list-disc list-inside text-gray-800 space-y-1">
-            {additionalRequirements.map((item, i) => (
-              <li key={i}>{item}</li>
+            {importantCautions.map((item, index) => (
+              <li key={index}>{item}</li>
             ))}
           </ul>
         </div>
 
-        {/* Chat Button */}
         <button
           onClick={openChat}
           className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-md"

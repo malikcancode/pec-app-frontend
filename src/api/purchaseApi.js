@@ -28,3 +28,8 @@ export const claimProfit = (token, purchaseId) =>
     { purchaseId },
     { headers: { Authorization: `Bearer ${token}` } }
   );
+
+export const deletePurchase = (token, id) =>
+  API.delete(`/purchases/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });

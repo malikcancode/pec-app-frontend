@@ -28,13 +28,12 @@ export const getMyTransactions = (token) =>
 /* ---------------------- ADMIN WALLET APIs ---------------------- */
 
 // Approve deposit
-export const approveDeposit = (token, transactionId) =>
+export const approveDeposit = (token, transactionId, amount) =>
   API.post(
     "/wallet/deposit/approve",
-    { transactionId },
+    amount !== undefined ? { transactionId, amount } : { transactionId },
     { headers: { Authorization: `Bearer ${token}` } }
   );
-
 // Reject deposit
 export const rejectDeposit = (token, transactionId) =>
   API.post(

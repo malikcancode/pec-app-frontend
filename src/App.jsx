@@ -34,6 +34,8 @@ import AdminMessages from "./pages/Admin/AdminMessages";
 import AdminKYC from "./pages/Admin/AdminKYC";
 import Success from "./pages/Success";
 import Fail from "./pages/Fail";
+import Benefits from "./pages/Benefits";
+import Userdetails from "./pages/Admin/Userdetails";
 
 // Lazy load components
 const Home = lazy(() => import("./pages/Home"));
@@ -79,6 +81,8 @@ function App() {
               <Route path="admin-products" element={<AdminProducts />} />
               <Route path="create-product" element={<CreateProduct />} />
               <Route path="users" element={<Users />} />
+              <Route path="users/:id" element={<Userdetails />} />{" "}
+              {/* <-- Add this */}
               <Route path="orders" element={<Orders />} />
               <Route path="notifications" element={<Notifications />} />
               <Route path="pending-deposit" element={<PendingDeposit />} />
@@ -87,7 +91,6 @@ function App() {
                 element={<PendingWithdrawal />}
               />
               <Route path="/admin/kyc" element={<AdminKYC />} />
-
               <Route path="recharge-history" element={<RechargeHistory />} />
               <Route path="withdraw-history" element={<WithdrawHistory />} />
               <Route path="bonus" element={<Bonus />} />
@@ -101,6 +104,16 @@ function App() {
                 <ProtectedRoute allowedRoles={["user"]}>
                   <DashboardLayout>
                     <Dashboard />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/benefits"
+              element={
+                <ProtectedRoute allowedRoles={["user"]}>
+                  <DashboardLayout>
+                    <Benefits />
                   </DashboardLayout>
                 </ProtectedRoute>
               }

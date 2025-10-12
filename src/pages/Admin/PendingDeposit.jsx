@@ -6,6 +6,7 @@ function PendingDeposit() {
   const [pendingDeposits, setPendingDeposits] = useState([]);
   const [loading, setLoading] = useState(false);
   const { token } = useContext(AuthContext);
+  const [editAmounts, setEditAmounts] = useState({}); // { [id]: value }
 
   useEffect(() => {
     const fetchPending = async () => {
@@ -23,7 +24,12 @@ function PendingDeposit() {
 
   const handleApprove = async (id) => {
     try {
-      await approveDeposit(token, id);
+      const editedAmount = editAmounts[id];
+      await approveDeposit(
+        token,
+        id,
+        editedAmount !== undefined ? Number(editedAmount) : undefined
+      );
       setPendingDeposits((prev) => prev.filter((t) => t._id !== id));
       alert("Deposit approved!");
     } catch (err) {
@@ -60,7 +66,24 @@ function PendingDeposit() {
                 {pendingDeposits.map((dep) => (
                   <tr key={dep._id} className="border-b border-gray-600">
                     <td className="px-4 py-3">{dep.user?.name || dep.user}</td>
-                    <td className="px-4 py-3">${dep.amount}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        min="1"
+                        value={
+                          editAmounts[dep._id] !== undefined
+                            ? editAmounts[dep._id]
+                            : dep.amount
+                        }
+                        onChange={(e) =>
+                          setEditAmounts((prev) => ({
+                            ...prev,
+                            [dep._id]: e.target.value,
+                          }))
+                        }
+                        className="w-24 px-2 py-1 rounded bg-gray-700 text-white border border-gray-500"
+                      />
+                    </td>
                     <td className="px-4 py-3">{dep.method}</td>
                     <td className="px-4 py-3 flex gap-2">
                       <button

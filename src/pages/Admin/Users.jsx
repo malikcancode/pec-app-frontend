@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaTrashAlt } from "react-icons/fa";
-import { getUsers, deleteUser } from "../../api/api"; // Import the API functions
+import { getUsers, deleteUser } from "../../api/api";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const { token } = useContext(AuthContext); // Get token from context
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem("token");
         if (!token) {
           setError("No token found. Please login.");
           setLoading(false);
@@ -31,11 +34,10 @@ function Users() {
     };
 
     fetchUsers();
-  }, []);
+  }, [token]);
 
   const handleDeleteUser = async (id) => {
     try {
-      const token = localStorage.getItem("token");
       if (!token) {
         setError("No token found. Please login.");
         return;
@@ -59,7 +61,6 @@ function Users() {
         {error && <p className="text-red-500">{error}</p>}
 
         <div className="bg-gray-800 rounded-lg shadow-md">
-          {/* Fixed height + scrollable only inside table */}
           <div className="max-h-[400px] overflow-y-auto">
             <table className="min-w-full text-sm text-left text-gray-300">
               <thead className="bg-gray-700 text-gray-100 sticky top-0 z-10">
@@ -77,6 +78,12 @@ function Users() {
                     <td className="px-6 py-3">{user.email}</td>
                     <td className="px-6 py-3">{user.role}</td>
                     <td className="px-6 py-3 flex space-x-4">
+                      <button
+                        onClick={() => navigate(`/admin/users/${user._id}`)}
+                        className="text-blue-500 hover:text-blue-600"
+                      >
+                        View
+                      </button>
                       <button
                         onClick={() => handleDeleteUser(user._id)}
                         className="text-red-500 hover:text-red-600"

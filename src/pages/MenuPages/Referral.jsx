@@ -1,24 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FaUsers, FaUserCircle, FaGift } from "react-icons/fa";
 import { FiCopy, FiCheck } from "react-icons/fi";
+import { getMyReferrals } from "../../api/api";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Referral() {
-  // Example referral data (this would usually come from API)
-  const [referrals] = useState([
-    { id: 1, name: "Ali Khan", joined: "2023-09-12", reward: "$5" },
-    { id: 2, name: "Sara Ahmed", joined: "2023-09-18", reward: "$10" },
-    { id: 3, name: "John Doe", joined: "2023-09-25", reward: "$5" },
-    { id: 4, name: "Amna Iqbal", joined: "2023-09-27", reward: "$15" },
-    { id: 5, name: "Hassan Ali", joined: "2023-09-28", reward: "$20" },
-  ]);
-
-  const referralLink = "partnersellercenter.shop/ref/USER123";
+  const { user, token } = useContext(AuthContext);
+  const [referrals, setReferrals] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+
+  const referralCode = user?.referralCode || "USER123";
+  const referralLink = `partnersellercenter.shop/ref/${referralCode}`;
+
+  useEffect(() => {
+    if (!token) return;
+    getMyReferrals(token)
+      .then((res) => {
+        setReferrals(res.data.referrals || []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [token]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000); // Reset after 2s
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -59,23 +67,24 @@ export default function Referral() {
         <h2 className="text-lg font-semibold text-gray-800 mb-4">
           Your Referrals
         </h2>
-
-        {referrals.length === 0 ? (
+        {loading ? (
+          <p className="text-gray-500 text-sm">Loading...</p>
+        ) : referrals.length === 0 ? (
           <p className="text-gray-500 text-sm">No referrals yet.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {referrals.map((referral) => (
               <div
-                key={referral.id}
+                key={referral._id}
                 className="p-4 border rounded-lg shadow-sm bg-gray-50 hover:shadow-md transition flex flex-col items-center text-center"
               >
                 <FaUserCircle className="text-green-500 text-4xl mb-2" />
                 <p className="font-medium text-gray-800">{referral.name}</p>
                 <p className="text-xs text-gray-500 mb-2">
-                  Joined on {referral.joined}
+                  Joined on {new Date(referral.createdAt).toLocaleDateString()}
                 </p>
                 <div className="flex items-center gap-1 text-green-600 font-medium text-sm">
-                  <FaGift /> {referral.reward}
+                  <FaGift /> Referral
                 </div>
               </div>
             ))}

@@ -1,33 +1,61 @@
+import { useEffect, useState, useContext } from "react";
 import StatCard from "./StatCard";
 import { FaDiamond, FaChartPie, FaMoneyBill, FaTag } from "react-icons/fa6";
+import { getBasicStats } from "../api/api";
+import { AuthContext } from "../context/AuthContext"; // Adjust path as needed
 
 export default function BasicStatistics() {
-  const stats = [
+  const { token } = useContext(AuthContext);
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!token) return;
+    getBasicStats(token)
+      .then((res) => {
+        setStats(res.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [token]);
+
+  if (loading) return <div>Loading statistics...</div>;
+  if (!stats) return <div>Failed to load statistics.</div>;
+
+  const statCards = [
     {
       title: "Total sales",
-      value: "609.71",
-      subtitle: "Current month sales 609.71\nLast month's sales 0.00",
+      value: stats.totalSales?.toFixed(2) ?? "0.00",
+      subtitle: `Current month sales ${
+        stats.currentMonthSales?.toFixed(2) ?? "0.00"
+      }\nLast month's sales ${stats.lastMonthSales?.toFixed(2) ?? "0.00"}`,
       icon: <FaDiamond />,
       iconColor: "text-green-500",
     },
     {
       title: "Available balance",
-      value: "6.73",
-      subtitle: "In transaction 0.00\nNumber of complaints 0",
+      value: stats.availableBalance?.toFixed(2) ?? "0.00",
+      subtitle: `In transaction ${
+        stats.inTransaction?.toFixed(2) ?? "0.00"
+      }\nNumber of complaints ${stats.complaints ?? 0}`,
       icon: <FaChartPie />,
       iconColor: "text-blue-500",
     },
     {
       title: "Total profit",
-      value: "61.10",
-      subtitle: "Profit for the month 61.10\nLast month's profit 0.00",
+      value: stats.totalProfit?.toFixed(2) ?? "0.00",
+      subtitle: `Profit for the month ${
+        stats.profitThisMonth?.toFixed(2) ?? "0.00"
+      }\nLast month's profit ${stats.profitLastMonth?.toFixed(2) ?? "0.00"}`,
       icon: <FaMoneyBill />,
       iconColor: "text-green-500",
     },
     {
       title: "Total number of orders",
-      value: "34",
-      subtitle: "Orders for the current month\nLast month's order 0",
+      value: stats.totalOrders ?? 0,
+      subtitle: `Orders for the current month ${
+        stats.ordersThisMonth ?? 0
+      }\nLast month's order ${stats.ordersLastMonth ?? 0}`,
       icon: <FaTag />,
       iconColor: "text-green-500",
     },
@@ -44,7 +72,7 @@ export default function BasicStatistics() {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        {stats.map((stat, index) => (
+        {statCards.map((stat, index) => (
           <StatCard
             key={index}
             title={stat.title}

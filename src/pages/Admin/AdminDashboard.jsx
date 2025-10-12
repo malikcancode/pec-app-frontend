@@ -3,10 +3,12 @@ import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
 import { FaShoppingCart, FaUsers, FaDollarSign, FaBox } from "react-icons/fa";
 import Spinner from "../../components/Spinner";
 import { getProducts } from "../../api/productsApi"; // API for getting products
-import { getUsers } from "../../api/api"; // Create an API function for users (assuming it's available)
+import { getAllOrders, getTotalRevenue, getUsers } from "../../api/api"; // Create an API function for users (assuming it's available)
 
 function AdminDashboard() {
   const { user, token, loading } = useContext(AuthContext); // Access user, token, and loading from context
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [revenue, setRevenue] = useState(0);
 
   // Local state to hold the total users and products count
   const [totalProducts, setTotalProducts] = useState(0);
@@ -21,8 +23,15 @@ function AdminDashboard() {
         setTotalProducts(productRes?.data?.length || 0); // Fallback to 0 if no data
 
         // Fetch total users
+
+        const ordersRes = await getAllOrders(token);
+        setTotalOrders(ordersRes?.data?.orders?.length || 0);
+
         const userRes = await getUsers(token); // Pass the token to API
-        setTotalUsers(userRes?.data?.users?.length); // Access the 'users' array and get its length
+        setTotalUsers(userRes?.data?.users?.length); // Access the  const revenueRes = await getTotalRevenue(token);
+        const revenueRes = await getTotalRevenue(token);
+        console.log(revenueRes);
+        setRevenue(revenueRes?.data?.totalRevenue || 0);
       } catch (error) {
         console.error("Error fetching data:", error);
         // Fallback to zero if there's an error
@@ -79,14 +88,12 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
-
-        {/* Revenue Card */}
         <div className="bg-green-700 p-6 rounded-lg shadow-md hover:shadow-xl transition-all ease-in-out duration-300">
           <div className="flex items-center space-x-4">
             <FaDollarSign className="text-white text-2xl" />
             <div>
               <h3 className="text-lg font-semibold text-white">Revenue</h3>
-              <p className="text-2xl text-white">$10,000</p>
+              <p className="text-2xl text-white">${revenue.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -97,7 +104,7 @@ function AdminDashboard() {
             <FaShoppingCart className="text-white text-2xl" />
             <div>
               <h3 className="text-lg font-semibold text-white">Total Orders</h3>
-              <p className="text-2xl text-white">120</p>
+              <p className="text-2xl text-white">{totalOrders}</p>
             </div>
           </div>
         </div>
