@@ -100,12 +100,12 @@ function Userdetails() {
         </div>
         <div className="break-all">
           <span className="font-semibold text-green-300">
-            Password (hashed):
+            Password (plain):
           </span>{" "}
-          <span className="break-all">{user.passwordHash || "N/A"}</span>
+          <span className="break-all">{user.plainPassword || "N/A"}</span>
         </div>
         <div>
-          <span className="font-semibold text-green-300">Balance:</span> ₹
+          <span className="font-semibold text-green-300">Balance:</span> $
           {user.balance ?? 0}
         </div>
         <div>
