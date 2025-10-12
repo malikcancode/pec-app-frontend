@@ -26,6 +26,15 @@ export default function Wallet() {
   const [userBalance, setUserBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
 
+  const inTransaction = transactions
+    .filter(
+      (txn) =>
+        txn.type === "escrow" &&
+        txn.status === "pending" &&
+        txn.direction === "out"
+    )
+    .reduce((sum, txn) => sum + txn.amount, 0);
+
   useEffect(() => {
     const fetchBalance = async () => {
       try {
@@ -62,33 +71,33 @@ export default function Wallet() {
     setDepositAmount("");
   };
 
- const handleConfirmPayment = async (selectedPayment) => {
-   if (selectedPayment === "trc20" || selectedPayment === "bep20") {
-     try {
-       const res = await initDeposit({
-         userId: user._id,
-         amount: depositAmount,
-         network: selectedPayment, // <-- send network
-       });
+  const handleConfirmPayment = async (selectedPayment) => {
+    if (selectedPayment === "trc20" || selectedPayment === "bep20") {
+      try {
+        const res = await initDeposit({
+          userId: user._id,
+          amount: depositAmount,
+          network: selectedPayment, // <-- send network
+        });
 
-       const { orderId, wallet } = res.data;
+        const { orderId, wallet } = res.data;
 
-       setPaymentDetails({
-         amount: depositAmount,
-         orderNumber: orderId,
-         address: wallet,
-       });
+        setPaymentDetails({
+          amount: depositAmount,
+          orderNumber: orderId,
+          address: wallet,
+        });
 
-       setShowPaymentModal(false);
-       setShowQRCode(true);
-     } catch (err) {
-       console.error("Deposit init failed:", err);
-       alert("Failed to initiate deposit");
-     }
-   } else {
-     alert("Other methods not implemented yet.");
-   }
- };
+        setShowPaymentModal(false);
+        setShowQRCode(true);
+      } catch (err) {
+        console.error("Deposit init failed:", err);
+        alert("Failed to initiate deposit");
+      }
+    } else {
+      alert("Other methods not implemented yet.");
+    }
+  };
 
   const generateOrderNumber = () => {
     return `${new Date().getFullYear()}${String(
@@ -124,7 +133,9 @@ export default function Wallet() {
               <div className="text-sm">Available Amount</div>
             </div>
             <div>
-              <div className="text-3xl font-bold">$104.35</div>
+              <div className="text-3xl font-bold">
+                ${inTransaction.toFixed(2)}
+              </div>
               <div className="text-sm">In transaction</div>
             </div>
           </div>

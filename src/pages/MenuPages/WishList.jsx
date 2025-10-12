@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaHeart, FaShoppingCart, FaStore } from "react-icons/fa";
 import { useWishlist } from "../../context/WishlistContext";
 import { useCart } from "../../context/CartContext"; // ✅ import
 
 function WishList() {
   const { wishlist, removeFromWishlist } = useWishlist();
-  const { cart, addToCart, removeFromCart } = useCart(); // ✅ get cart functions
+  const { cart, addToCart, removeFromCart } = useCart();
+
+  useEffect(() => {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -17,12 +21,14 @@ function WishList() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {wishlist.map((item) => {
-              // Check if the item exists in the cart
-              const isInCart = cart.some((cartItem) => cartItem.id === item.id);
+              // Use _id everywhere
+              const isInCart = cart.some(
+                (cartItem) => cartItem._id === item._id
+              );
 
               return (
                 <div
-                  key={item.id}
+                  key={item._id}
                   className="bg-white rounded-xl shadow hover:shadow-lg transition p-4 flex flex-col"
                 >
                   {/* Product Image */}
@@ -33,7 +39,7 @@ function WishList() {
                       className="w-full h-40 object-contain"
                     />
                     <button
-                      onClick={() => removeFromWishlist(item.id)}
+                      onClick={() => removeFromWishlist(item._id)}
                       className="absolute top-2 right-2 bg-white rounded-full p-2 shadow text-red-500 hover:text-red-600"
                     >
                       <FaHeart />
@@ -65,9 +71,9 @@ function WishList() {
                   <button
                     onClick={() => {
                       if (isInCart) {
-                        removeFromCart(item.id); // Remove from cart if already in cart
+                        removeFromCart(item._id);
                       } else {
-                        addToCart(item); // Add to cart if not in cart
+                        addToCart(item);
                       }
                     }}
                     className={`mt-4 py-2 rounded-lg flex items-center justify-center gap-2 transition ${

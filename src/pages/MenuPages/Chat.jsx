@@ -18,22 +18,6 @@ export default function Chat() {
     Crisp.chat.open();
   };
 
-  const rechargeSteps = [
-    "Chat with customer support to initiate recharge request.",
-    "Get payment link/details for the requested recharge amount.",
-    "Copy the link and make payment.",
-    "Add Transaction ID/UTR to complete recharge.",
-    "Pay the exact amount as requested.",
-    "Wait for confirmation and recharge credit.",
-    "Provide payment screenshot for fast verification.",
-  ];
-
-  const importantCautions = [
-    "Pay exact amount.",
-    "Provide Transaction ID/UTR.",
-    "Failure to do so may result in non-crediting of recharge amount.",
-  ];
-
   return (
     <div className="p-6 min-h-screen bg-gray-50">
       <h1 className="text-2xl font-bold text-green-600 mb-6 flex items-center gap-2">
@@ -42,26 +26,42 @@ export default function Chat() {
 
       <div className="bg-white shadow-md rounded-lg p-6 border border-green-200 mb-6">
         <h2 className="text-2xl font-bold text-green-600 mb-6 text-start">
-          Follow These Steps for Offline Recharge
+          Recharge Instructions
         </h2>
 
-        <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded-lg mb-4 shadow-sm">
-          <ul className="list-decimal list-inside text-gray-800 space-y-2">
-            {rechargeSteps.map((step, index) => (
-              <li key={index}>{step}</li>
-            ))}
-          </ul>
+        <div className="bg-green-50 border-l-4 border-green-600 p-4 rounded-lg mb-4 shadow-sm text-gray-800 leading-relaxed space-y-4">
+          <p>
+            To initiate an offline recharge, start by chatting with our customer
+            support team. They will guide you through the process and provide a
+            payment link or the necessary payment details for your requested
+            recharge amount.
+          </p>
+          <p>
+            Once you receive the payment link or details, copy them carefully
+            and make the payment. After completing your payment, please add the{" "}
+            <strong>Transaction ID/UTR</strong> to finalize your recharge
+            request. Make sure to pay the <strong>exact amount</strong> that was
+            requested to avoid any delays.
+          </p>
+          <p>
+            Once payment is made, kindly wait for the confirmation and credit of
+            your recharge. Providing a <strong>payment screenshot</strong> can
+            help our team verify your transaction more quickly and ensure faster
+            processing.
+          </p>
         </div>
 
         <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg mb-6 shadow-sm">
           <h3 className="text-lg font-semibold text-yellow-700 mb-2">
             Important Caution
           </h3>
-          <ul className="list-disc list-inside text-gray-800 space-y-1">
-            {importantCautions.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <p className="text-gray-800 leading-relaxed">
+            Please make sure to pay the <strong>exact amount</strong> as
+            instructed and always provide your{" "}
+            <strong>Transaction ID/UTR</strong>. Failure to provide correct
+            payment details or transaction proof may result in your recharge
+            amount not being credited.
+          </p>
         </div>
 
         <button

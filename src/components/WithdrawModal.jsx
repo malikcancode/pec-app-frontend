@@ -14,7 +14,12 @@ export default function WithdrawModal({ isOpen, onClose, onSuccess }) {
     method: "",
   });
   const [loading, setLoading] = useState(false);
-
+  const fee = form.amount
+    ? Math.round(Number(form.amount) * 0.05 * 100) / 100
+    : 0;
+  const netAmount = form.amount
+    ? Math.round((Number(form.amount) - fee) * 100) / 100
+    : 0;
   if (!isOpen) return null;
 
   const withdrawalMethods = [
@@ -124,8 +129,20 @@ export default function WithdrawModal({ isOpen, onClose, onSuccess }) {
                 onChange={handleChange}
                 placeholder="0.00"
                 className="w-full outline-none text-gray-900"
+                min="1"
               />
             </div>
+            {form.amount && Number(form.amount) > 0 && (
+              <div className="mt-2 text-sm text-gray-600">
+                <div>
+                  Fee (5%): <span className="text-red-500">${fee}</span>
+                </div>
+                <div>
+                  Net Amount:{" "}
+                  <span className="text-green-600">${netAmount}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Withdrawal Method */}

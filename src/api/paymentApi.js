@@ -72,3 +72,10 @@ export const getPendingTransactions = (token) =>
   API.get("/wallet/transactions?status=pending", {
     headers: { Authorization: `Bearer ${token}` },
   });
+
+export const releaseBuyerEscrow = (token, transactionId) =>
+  API.post(
+    "/wallet/release-buyer-escrow",
+    { transactionId },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );

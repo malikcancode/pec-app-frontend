@@ -22,9 +22,14 @@ export default function BasicStatistics() {
   if (loading) return <div>Loading statistics...</div>;
   if (!stats) return <div>Failed to load statistics.</div>;
 
+  const profitPercent =
+    stats.totalSales && stats.totalSales > 0
+      ? ((stats.totalProfit / stats.totalSales) * 100).toFixed(2)
+      : "0.00";
+
   const statCards = [
     {
-      title: "Total sales",
+      title: "Total Spend",
       value: stats.totalSales?.toFixed(2) ?? "0.00",
       subtitle: `Current month sales ${
         stats.currentMonthSales?.toFixed(2) ?? "0.00"
@@ -46,7 +51,9 @@ export default function BasicStatistics() {
       value: stats.totalProfit?.toFixed(2) ?? "0.00",
       subtitle: `Profit for the month ${
         stats.profitThisMonth?.toFixed(2) ?? "0.00"
-      }\nLast month's profit ${stats.profitLastMonth?.toFixed(2) ?? "0.00"}`,
+      }\nLast month's profit ${
+        stats.profitLastMonth?.toFixed(2) ?? "0.00"
+      }\nTotal profit rate: ${profitPercent}%`,
       icon: <FaMoneyBill />,
       iconColor: "text-green-500",
     },

@@ -46,11 +46,16 @@ export default function ProductsHeader() {
           />
         </div>
 
-        {/* Category dropdown */}
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2 border rounded-lg w-20 text-xs sm:w-40 md:w-48"
+          className="px-4 py-2 rounded-lg w-24 sm:w-40 md:w-48 bg-green-500 text-white font-medium border border-green-600 
+             focus:outline-none focus:ring-2 focus:ring-green-300 appearance-none transition-colors duration-200"
+          style={{
+            WebkitAppearance: "none",
+            MozAppearance: "none",
+            appearance: "none",
+          }}
         >
           <option value="">All Categories</option>
           {sortedCategories.map((cat) => (
